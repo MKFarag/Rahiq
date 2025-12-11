@@ -1,14 +1,23 @@
-﻿namespace Presentation;
+﻿using Infrastructure;
+
+namespace Presentation;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        services.AddControllers();
-        services
-            .AddEndpointsApiExplorer()
-            .AddOpenApi();
+        public IServiceCollection AddDependencies(IConfiguration configuration)
+        {
+            services.AddControllers();
+            services.AddInfrastructureDependencies(configuration);
 
-        return services;
+
+
+            services
+                .AddEndpointsApiExplorer()
+                .AddOpenApi();
+
+            return services;
+        }
     }
 }
