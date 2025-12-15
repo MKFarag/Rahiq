@@ -1,7 +1,4 @@
-﻿using Domain.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace Infrastructure.Persistence.Configurations;
+﻿namespace Infrastructure.Persistence.Configurations;
 
 internal class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
@@ -15,7 +12,6 @@ internal class ApplicationUserConfiguration : IEntityTypeConfiguration<Applicati
             .WithOwner()
             .HasForeignKey("UserId");
 
-        //////////////////////////////////////////////////////////////////////////
 
         // Properties
 
@@ -27,6 +23,5 @@ internal class ApplicationUserConfiguration : IEntityTypeConfiguration<Applicati
             .Property(u => u.LastName)
             .HasMaxLength(50);
 
-        //////////////////////////////////////////////////////////////////////////
     }
 }

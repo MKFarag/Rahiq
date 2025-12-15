@@ -6,7 +6,6 @@ public sealed class Order
     public string CustomerId { get; set; } = string.Empty;
     public int ShippingId { get; set; }
     public DateTime Date { get; set; } = DateTime.UtcNow;
-    public string Phone { get; set; } = string.Empty;
     public OrderStatus Status { get; set; }
     public decimal Total { get; set; }
 
