@@ -28,7 +28,11 @@ public static class DependencyInjection
 
             services
                 .AddEndpointsApiExplorer()
-                .AddOpenApi();
+                .AddOpenApiDocument(options =>
+                {
+                    options.AddBearerSecurity();
+                    options.ConfigureDocument();
+                });
 
             return services;
         }
