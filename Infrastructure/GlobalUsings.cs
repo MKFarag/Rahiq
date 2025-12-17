@@ -14,3 +14,6 @@ global using Domain.Repositories;
 global using Mapster;
 global using Microsoft.AspNetCore.Http;
 global using Infrastructure.Extensions;
+global using Microsoft.Extensions.Logging;
+global using Infrastructure.Services;
+global using Domain.Settings;

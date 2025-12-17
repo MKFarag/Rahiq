@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #cfcfcf 0%, #e0e0e0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #00cec9, #00b894);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00cec9, #00b894);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .message {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .verify-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #00cec9, #00b894);
+            color: white;
+            padding: 18px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 206, 201, 0.3);
+        }
+        
+        .verify-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 206, 201, 0.4);
+        }
+        
+        .alternative-section {
+            margin: 40px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #00cec9;
+        }
+        
+        .alternative-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .url-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #555;
+        }
+        
+        .security-note {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #0c5460;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .company-info {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header, .content, .footer {
+                padding: 25px 20px;
+            }
+            
+            .greeting {
+                font-size: 20px;
+            }
+            
+            .verify-button {
+                padding: 15px 30px;
+                font-size: 14px;
+            }
+            
+            .icon {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>{{TitleName}}</h1>
+            <p>Email Verification Required</p>
+        </div>
+        
+        <div class="content">
+            <!--<div class="icon">✉️</div>-->
+            
+            <div class="greeting">Hi {{UserName}},</div>
+            
+            <div class="message">
+                To confirm your email address, please click the button below:
+            </div>
+            
+            <a href="{{ActionUrl}}" class="verify-button">Verify email address</a>
+            
+            <div class="alternative-section">
+                <div class="alternative-text">
+                    If you are having trouble with the button above, copy and paste the URL below into your web browser:
+                </div>
+                <div class="url-container">{{ActionUrl}}</div>
+            </div>
+            
+            <div class="security-note">
+                <strong>Security Notice:</strong> This verification link will expire in {{ExpiryTime}} hours for security reasons.
+            </div>
+            
+            <div class="message">
+                If you need further assistance, please contact our support team at {{SupportEmail}}.
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-text">
+                Thanks,<br>
+                <strong>{{TeamName}}</strong>
+            </div>
+            
+            <div class="company-info">
+                {{TitleName}}<br>
+                {{Address}}<br>
+                {{City}}, {{Country}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
