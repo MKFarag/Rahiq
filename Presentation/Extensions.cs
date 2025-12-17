@@ -1,13 +1,40 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation;
 using NSwag.Generation.AspNetCore;
 using NSwag.Generation.Processors.Security;
 
-namespace Presentation.Extensions;
+namespace Presentation;
 
-public static class SwaggerExtensions
+public static class Extensions
 {
+    extension(Result result)
+    {
+        public ObjectResult ToProblem()
+        {
+            if (result.IsSuccess)
+                throw new InvalidOperationException("Cannot create a problem details response for a successful result.");
+
+            var problem = Results.Problem(statusCode: result.Error.StatusCode);
+
+            var problemDetails = problem.GetType().GetProperty(nameof(ProblemDetails))!.GetValue(problem) as ProblemDetails;
+
+            problemDetails!.Extensions = new Dictionary<string, object?>
+            {
+                {
+                    "error", new Dictionary<string, string>
+                    {
+                        { "code", result.Error.Code },
+                        { "description", result.Error.Description }
+                    }
+                }
+            };
+
+            return new ObjectResult(problemDetails);
+        }
+    }
+
     extension(AspNetCoreOpenApiDocumentGeneratorSettings options)
     {
         public OpenApiDocumentGeneratorSettings AddBearerSecurity()

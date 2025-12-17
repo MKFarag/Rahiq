@@ -1,1 +1,2 @@
-﻿global using Presentation.Extensions;
+﻿global using Presentation;
+global using Domain.Abstraction;

@@ -2,7 +2,6 @@
 
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
-using Presentation;
 using Serilog;
 
 #endregion
