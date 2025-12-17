@@ -23,5 +23,23 @@ internal class ApplicationUserConfiguration : IEntityTypeConfiguration<Applicati
             .Property(u => u.LastName)
             .HasMaxLength(50);
 
+        // Default data
+
+        builder
+            .HasData(new ApplicationUser
+            {
+                Id = DefaultUsers.Admin.Id,
+                Email = DefaultUsers.Admin.Email,
+                NormalizedEmail = DefaultUsers.Admin.Email.ToUpper(),
+                EmailConfirmed = true,
+                UserName = DefaultUsers.Admin.Email,
+                NormalizedUserName = DefaultUsers.Admin.Email.ToUpper(),
+                PasswordHash = DefaultUsers.Admin.PasswordHash,
+                SecurityStamp = DefaultUsers.Admin.SecurityStamp,
+                ConcurrencyStamp = DefaultUsers.Admin.ConcurrencyStamp,
+                FirstName = DefaultUsers.Admin.FirstName,
+                LastName = DefaultUsers.Admin.LastName,
+                IsDisabled = false
+            });
     }
 }

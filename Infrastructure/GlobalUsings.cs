@@ -7,3 +7,4 @@ global using Application.Interfaces.Infrastructure;
 global using Microsoft.Extensions.Options;
 global using System.Text;
 global using System.Linq.Expressions;
+global using Domain.Constants;
