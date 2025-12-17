@@ -30,7 +30,7 @@ public static class DependencyInjection
             services.AddApplicationDependencies();
             services.AddAuthConfig(configuration);
 
-
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services
                 .AddExceptionHandler<GlobalExceptionHandler>()
