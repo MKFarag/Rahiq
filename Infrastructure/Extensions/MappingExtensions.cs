@@ -15,6 +15,7 @@ internal static class MappingExtensions
         => new()
         {
             Email = user.Email,
+            UserName = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
             IsDisabled = user.IsDisabled
