@@ -11,6 +11,7 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Presentation.Abstraction;
 using System.Text;
 
 #endregion
@@ -30,6 +31,10 @@ public static class DependencyInjection
             services.AddAuthConfig(configuration);
 
 
+
+            services
+                .AddExceptionHandler<GlobalExceptionHandler>()
+                .AddProblemDetails();
 
             services
                 .AddEndpointsApiExplorer()
