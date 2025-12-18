@@ -32,6 +32,18 @@ public static class DependencyInjection
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()!);
+                });
+            });
+
             services
                 .AddExceptionHandler<GlobalExceptionHandler>()
                 .AddProblemDetails();
