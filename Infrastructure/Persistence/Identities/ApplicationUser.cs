@@ -12,5 +12,5 @@ public class ApplicationUser : IdentityUser<string>
     public string LastName { get; set; } = string.Empty;
     public bool IsDisabled { get; set; }
 
-    public List<RefreshToken> RefreshTokens { get; set; } = default!;
+    public List<RefreshToken> RefreshTokens { get; set; } = [];
 }

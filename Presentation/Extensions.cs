@@ -1,9 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿#region Usings
+
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NSwag;
 using NSwag.Generation;
 using NSwag.Generation.AspNetCore;
 using NSwag.Generation.Processors.Security;
+using System.Security.Claims;
+
+#endregion
 
 namespace Presentation;
 
@@ -59,5 +66,11 @@ public static class Extensions
 
             return options;
         }
+    }
+
+    extension(ClaimsPrincipal user)
+    {
+        public string? GetId()
+            => user.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

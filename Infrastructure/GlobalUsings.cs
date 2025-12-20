@@ -17,3 +17,5 @@ global using Infrastructure.Extensions;
 global using Microsoft.Extensions.Logging;
 global using Infrastructure.Services;
 global using Domain.Settings;
+global using Infrastructure.Persistence.Common;
+global using Application.Contracts.Common;

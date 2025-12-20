@@ -11,3 +11,4 @@ global using System.Text;
 global using Application.Contracts.Auth;
 global using FluentValidation;
 global using Microsoft.AspNetCore.Http;
+global using Application.Contracts.Common;
