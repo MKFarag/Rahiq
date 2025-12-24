@@ -76,24 +76,12 @@ public class UserRepository(ApplicationDbContext context, UserManager<Applicatio
 
     #region Check Operations
 
-    public async Task<bool> IsLockedOutAsync(User user)
-    {
-        var applicationUser = await GetByIdOrThrowAsync(user.Id);
-
-        return await _userManager.IsLockedOutAsync(applicationUser);
-    }
-
     public async Task<bool> IsEmailConfirmedAsync(User user)
     {
         var applicationUser = await GetByIdOrThrowAsync(user.Id);
 
         return await _userManager.IsEmailConfirmedAsync(applicationUser);
     }
-
-    public async Task<bool> ExistsAsync(string userId, CancellationToken cancellationToken = default)
-        => await _context.Users
-            .AsNoTracking()
-            .AnyAsync(u => u.Id == userId, cancellationToken);
 
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
     {

@@ -24,14 +24,8 @@ public interface IUserRepository
 
     #region Check Operations
 
-    /// <summary>Checks if a user account is currently locked out.</summary>
-    Task<bool> IsLockedOutAsync(User user);
-
     /// <summary>Checks if a user's email address has been confirmed.</summary>
     Task<bool> IsEmailConfirmedAsync(User user);
-
-    /// <summary>Checks if a user exists in the system.</summary>
-    Task<bool> ExistsAsync(string userId, CancellationToken cancellationToken = default);
 
     /// <summary>Checks if an email address is already registered in the system.</summary>
     Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default);
