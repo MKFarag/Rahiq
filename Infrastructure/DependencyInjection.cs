@@ -1,7 +1,6 @@
 ﻿#region Usings
 
 using Infrastructure.Persistence;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,24 +22,28 @@ public static class DependencyInjection
                 options.UseSqlServer(connectionString);
             });
 
-            services
-                .AddHttpContextAccessor()
-                .AddMailConfig(configuration);
+            services.AddMailConfig(configuration);
 
             return services;
         }
 
         private IServiceCollection AddMailConfig(IConfiguration configuration)
         {
-            services.AddOptions<EmailTemplateOptions>().Bind(configuration.GetSection(nameof(EmailTemplateOptions)));
+
+            services.AddOptions<EmailTemplateOptions>()
+                .Bind(configuration.GetSection(nameof(EmailTemplateOptions)));
+
+            services.AddOptions<AppUrlSettings>()
+                .Bind(configuration.GetSection(AppUrlSettings.SectionName));
 
             services.AddOptions<MailSettings>()
                 .Bind(configuration.GetSection(nameof(MailSettings)))
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
-            services.AddScoped<IEmailSender, EmailService>();
-            services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<ITemplateRenderer, TemplateRenderer>();
+            services.AddScoped<IEmailSender, EmailSender>();
 
             return services;
         }
