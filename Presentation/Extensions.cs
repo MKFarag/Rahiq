@@ -1,9 +1,7 @@
 ﻿#region Usings
 
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NSwag;
 using NSwag.Generation;
 using NSwag.Generation.AspNetCore;

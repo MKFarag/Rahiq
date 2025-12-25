@@ -1,6 +1,4 @@
-﻿using Application.Interfaces;
-
-namespace Application.Feathers.Auth.GetToken;
+﻿namespace Application.Feathers.Auth.GetToken;
 
 public class GetTokenCommandHandler(ISignInService signInService, IJwtProvider jwtProvider, IUnitOfWork unitOfWork) : IRequestHandler<GetTokenCommand, Result<AuthResponse>>
 {
@@ -11,7 +9,7 @@ public class GetTokenCommandHandler(ISignInService signInService, IJwtProvider j
     public async Task<Result<AuthResponse>> Handle(GetTokenCommand request, CancellationToken cancellationToken)
     {
         var result = await _signInService.PasswordSignInAsync(request.Identifier, request.Password, false);
-        
+
         if (result.IsFailure)
             return Result.Failure<AuthResponse>(result.Error);
 

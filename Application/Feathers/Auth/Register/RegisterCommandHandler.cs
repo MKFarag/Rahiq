@@ -1,6 +1,4 @@
-﻿using Application.Interfaces;
-
-namespace Application.Feathers.Auth.Register;
+﻿namespace Application.Feathers.Auth.Register;
 
 public class RegisterCommandHandler(INotificationService notificationService, IUnitOfWork unitOfWork, IUrlEncoder urlEncoder) : IRequestHandler<RegisterCommand, Result>
 {

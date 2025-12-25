@@ -10,18 +10,18 @@ public class SignInService(UserManager<ApplicationUser> userManager) : ISignInSe
             ? await _userManager.FindByEmailAsync(identifier)
             : await _userManager.FindByNameAsync(identifier);
 
-        if (user is null) 
+        if (user is null)
             return Result.Failure<User>(UserErrors.InvalidCredentials);
 
         if (lockoutOnFailure && await _userManager.IsLockedOutAsync(user))
             return Result.Failure<User>(UserErrors.LockedUser);
 
-        if (!user.EmailConfirmed) 
+        if (!user.EmailConfirmed)
             return Result.Failure<User>(UserErrors.EmailNotConfirmed);
 
         if (!await _userManager.CheckPasswordAsync(user, password))
         {
-            if (lockoutOnFailure) 
+            if (lockoutOnFailure)
                 await _userManager.AccessFailedAsync(user);
 
             return Result.Failure<User>(UserErrors.InvalidCredentials);

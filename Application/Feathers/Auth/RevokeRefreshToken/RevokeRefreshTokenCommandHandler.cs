@@ -1,6 +1,4 @@
-﻿using Application.Interfaces;
-
-namespace Application.Feathers.Auth.RevokeRefreshToken;
+﻿namespace Application.Feathers.Auth.RevokeRefreshToken;
 
 public class RevokeRefreshTokenCommandHandler(IJwtProvider jwtProvider, IUnitOfWork unitOfWork) : IRequestHandler<RevokeRefreshTokenCommand, Result>
 {

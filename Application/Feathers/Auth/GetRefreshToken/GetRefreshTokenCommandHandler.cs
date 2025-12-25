@@ -1,5 +1,4 @@
-﻿using Application.Interfaces;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace Application.Feathers.Auth.GetRefreshToken;
 
