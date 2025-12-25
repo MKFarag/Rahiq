@@ -14,8 +14,6 @@ public static class DependencyInjection
 
             services.AddMapsterConfig();
 
-            services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
             return services;
         }
 

@@ -6,7 +6,7 @@ public record UserErrors
         new("User.NotFound", "No user found", StatusCodes.NotFound);
 
     public static readonly Error InvalidCredentials =
-        new("User.InvalidCredentials", "Invalid email/username/password", StatusCodes.Unauthorized);
+        new("User.InvalidCredentials", "Invalid email/password", StatusCodes.Unauthorized);
 
     public static readonly Error InvalidJwtToken =
         new("User.InvalidJwtToken", "Invalid Jwt token", StatusCodes.Unauthorized);

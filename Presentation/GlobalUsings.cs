@@ -2,4 +2,4 @@
 global using Presentation;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
-global using MediatR;
+global using Application.Abstraction.Messaging;

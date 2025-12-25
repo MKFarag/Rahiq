@@ -9,5 +9,5 @@ global using Domain.Errors;
 global using Domain.Repositories;
 global using FluentValidation;
 global using Mapster;
-global using MediatR;
 global using System.Linq.Expressions;
+global using Application.Abstraction.Messaging;

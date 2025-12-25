@@ -1,0 +1,5 @@
+﻿namespace Application.Abstraction.Messaging;
+
+public interface IRequest<out TResponse> { }
+public interface IRequest { }
+
