@@ -10,7 +10,7 @@ public class GetTokenCommandHandler(ISignInService signInService, IJwtProvider j
 
     public async Task<Result<AuthResponse>> Handle(GetTokenCommand request, CancellationToken cancellationToken)
     {
-        var result = await _signInService.PasswordSignInAsync(request.Identifier, request.Password, false, false);
+        var result = await _signInService.PasswordSignInAsync(request.Identifier, request.Password, false);
         
         if (result.IsFailure)
             return Result.Failure<AuthResponse>(result.Error);

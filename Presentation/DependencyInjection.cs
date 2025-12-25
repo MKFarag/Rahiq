@@ -34,7 +34,7 @@ public static class DependencyInjection
             services.AddMailConfig(configuration);
             services.AddAuthConfig(configuration);
 
-            //services.AddScoped<ISignInService, SignInService>();
+            services.AddScoped<ISignInService, SignInService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUrlEncoder, UrlEncoder>();
 
@@ -75,23 +75,6 @@ public static class DependencyInjection
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
-            #endregion
-
-            #region Roles
-
-            //services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
-            //services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
-
-            #endregion
-
-            #region Add Identity
-
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            #endregion
-
             #region Validations
 
             var settings = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
@@ -119,7 +102,23 @@ public static class DependencyInjection
 
             #endregion
 
-            #region Identity Configurations
+            #endregion
+
+            #region Permission based authentication
+
+            //services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            //services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+
+            #endregion
+
+            #region Add Identity
+
+            services
+                .AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            #region Configurations
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -128,10 +127,7 @@ public static class DependencyInjection
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.Configure<DataProtectionTokenProviderOptions>(options =>
-            {
-                options.TokenLifespan = TimeSpan.FromHours(24);
-            });
+            #endregion
 
             #endregion
 

@@ -1,50 +1,36 @@
-﻿//using Application.Interfaces;
+﻿namespace Infrastructure.Services;
 
-//namespace Infrastructure.Services;
+public class SignInService(UserManager<ApplicationUser> userManager) : ISignInService
+{
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-//public class SignInService(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager) : ISignInService
-//{
-//    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-//    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    public async Task<Result<User>> PasswordSignInAsync(string identifier, string password, bool lockoutOnFailure)
+    {
+        var user = identifier.Contains('@')
+            ? await _userManager.FindByEmailAsync(identifier)
+            : await _userManager.FindByNameAsync(identifier);
 
-//    public async Task<Result<User>> PasswordSignInAsync(string identifier, string password, bool isPersistent, bool lockoutOnFailure)
-//    {
-//        if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrWhiteSpace(password))
-//            return Result.Failure<User>(UserErrors.InvalidCredentials);
+        if (user is null) 
+            return Result.Failure<User>(UserErrors.InvalidCredentials);
 
-//        var user = await GetUserByIdentifierAsync(identifier);
+        if (lockoutOnFailure && await _userManager.IsLockedOutAsync(user))
+            return Result.Failure<User>(UserErrors.LockedUser);
 
-//        if (user is null)
-//            return Result.Failure<User>(UserErrors.InvalidCredentials);
+        if (!user.EmailConfirmed) 
+            return Result.Failure<User>(UserErrors.EmailNotConfirmed);
 
-//        var result = await _signInManager.PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure);
+        if (!await _userManager.CheckPasswordAsync(user, password))
+        {
+            if (lockoutOnFailure) 
+                await _userManager.AccessFailedAsync(user);
 
-//        return result.Succeeded
-//            ? Result.Success(user.Adapt<User>())
-//            : Result.Failure<User>(MapSignInError(result));
-//    }
+            return Result.Failure<User>(UserErrors.InvalidCredentials);
+        }
 
-//    private async Task<ApplicationUser?> GetUserByIdentifierAsync(string identifier)
-//        => IsEmail(identifier)
-//            ? await _userManager.FindByEmailAsync(identifier)
-//            : await _userManager.FindByNameAsync(identifier);
+        if (lockoutOnFailure && user.AccessFailedCount > 0)
+            await _userManager.ResetAccessFailedCountAsync(user);
 
-//    private static bool IsEmail(string identifier)
-//    {
-//        try
-//        {
-//            var mailAddress = new System.Net.Mail.MailAddress(identifier);
-//            return mailAddress.Address == identifier;
-//        }
-//        catch
-//        {
-//            return false;
-//        }
-//    }
-
-//    private static Error MapSignInError(SignInResult result)
-//        => result.IsNotAllowed ? UserErrors.EmailNotConfirmed
-//             : result.IsLockedOut ? UserErrors.LockedUser
-//             : UserErrors.InvalidCredentials;
-//}
+        return Result.Success(user.Adapt<User>());
+    }
+}
 
