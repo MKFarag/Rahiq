@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using Application.Interfaces;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 

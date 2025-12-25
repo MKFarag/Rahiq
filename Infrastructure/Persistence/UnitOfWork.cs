@@ -1,4 +1,5 @@
-﻿using Infrastructure.Persistence.Repositories;
+﻿using Application.Interfaces;
+using Infrastructure.Persistence.Repositories;
 
 namespace Infrastructure.Persistence;
 

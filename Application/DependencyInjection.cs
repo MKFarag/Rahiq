@@ -1,9 +1,5 @@
-﻿using FluentValidation;
-using Mapster;
-using MapsterMapper;
-using Microsoft.Extensions.Configuration;
+﻿using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
 
 namespace Application;
@@ -14,15 +10,14 @@ public static class DependencyInjection
     {
         public IServiceCollection AddApplicationDependencies()
         {
-            services
-                .AddFluentValidationAutoValidation()
-                .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddMapsterConfig();
 
+            services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
             return services;
         }
-
 
         private IServiceCollection AddMapsterConfig()
         {

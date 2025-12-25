@@ -22,29 +22,6 @@ public static class DependencyInjection
                 options.UseSqlServer(connectionString);
             });
 
-            services.AddMailConfig(configuration);
-
-            return services;
-        }
-
-        private IServiceCollection AddMailConfig(IConfiguration configuration)
-        {
-
-            services.AddOptions<EmailTemplateOptions>()
-                .Bind(configuration.GetSection(nameof(EmailTemplateOptions)));
-
-            services.AddOptions<AppUrlSettings>()
-                .Bind(configuration.GetSection(AppUrlSettings.SectionName));
-
-            services.AddOptions<MailSettings>()
-                .Bind(configuration.GetSection(nameof(MailSettings)))
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
-
-            services.AddScoped<INotificationService, NotificationService>();
-            services.AddScoped<ITemplateRenderer, TemplateRenderer>();
-            services.AddScoped<IEmailSender, EmailSender>();
-
             return services;
         }
     }

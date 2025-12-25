@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using Application.Interfaces;
+using Hangfire;
 
 namespace Infrastructure.Services;
 

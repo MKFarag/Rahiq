@@ -1,7 +1,8 @@
 ﻿#region Usings
 
 using Application;
-using Application.Interfaces.Infrastructure;
+using Application.Interfaces;
+using Domain.Settings;
 using Hangfire;
 using Infrastructure;
 using Infrastructure.Authentication;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Presentation.Abstraction;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Text;
 
 #endregion
@@ -28,10 +30,13 @@ public static class DependencyInjection
             services.AddInfrastructureDependencies(configuration);
             services.AddHangfireConfig(configuration);
             services.AddApplicationDependencies();
+            services.AddFluentValidationAutoValidation();
+            services.AddMailConfig(configuration);
             services.AddAuthConfig(configuration);
 
+            //services.AddScoped<ISignInService, SignInService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+            services.AddScoped<IUrlEncoder, UrlEncoder>();
 
             services.AddCors(options =>
             {
@@ -130,13 +135,6 @@ public static class DependencyInjection
 
             #endregion
 
-            #region Service Lifetime
-
-            //services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<ISignInService, SignInService>();
-
-            #endregion
-
             return services;
         }
 
@@ -152,6 +150,27 @@ public static class DependencyInjection
             );
 
             services.AddHangfireServer();
+
+            return services;
+        }
+
+        private IServiceCollection AddMailConfig(IConfiguration configuration)
+        {
+
+            services.AddOptions<EmailTemplateOptions>()
+                .Bind(configuration.GetSection(nameof(EmailTemplateOptions)));
+
+            services.AddOptions<AppUrlSettings>()
+                .Bind(configuration.GetSection(AppUrlSettings.SectionName));
+
+            services.AddOptions<MailSettings>()
+                .Bind(configuration.GetSection(nameof(MailSettings)))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<ITemplateRenderer, TemplateRenderer>();
+            services.AddScoped<IEmailSender, EmailSender>();
 
             return services;
         }

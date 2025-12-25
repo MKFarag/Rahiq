@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Services;
+﻿using Application.Interfaces;
+
+namespace Infrastructure.Services;
 
 public class NotificationService
     (IOptions<EmailTemplateOptions> templateOptions,

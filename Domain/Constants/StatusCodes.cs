@@ -1,6 +1,6 @@
 ﻿namespace Domain.Constants;
 
-internal static class StatusCodes
+public static class StatusCodes
 {
     // 2xx Success
     public const int Ok = 200;
