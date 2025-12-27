@@ -11,3 +11,4 @@ global using FluentValidation;
 global using Mapster;
 global using System.Linq.Expressions;
 global using Application.Abstraction.Messaging;
+global using Application.Contracts.Categories;

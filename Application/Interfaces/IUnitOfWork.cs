@@ -2,6 +2,7 @@
 
 public interface IUnitOfWork : IDisposable
 {
+    IGenericRepository<Category> Categories { get; }
     IRoleRepository Roles { get; }
     IUserRepository Users { get; }
 
