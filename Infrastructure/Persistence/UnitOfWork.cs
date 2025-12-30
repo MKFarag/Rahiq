@@ -8,6 +8,7 @@ public sealed class UnitOfWork : IUnitOfWork
     private bool _disposed = false;
 
     public IGenericRepository<Category> Categories { get; private set; }
+    public IGenericRepository<Product> Products { get; private set; }
     public IRoleRepository Roles { get; private set; }
     public IUserRepository Users { get; private set; }
 
