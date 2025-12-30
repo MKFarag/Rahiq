@@ -3,3 +3,4 @@ global using Presentation;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using Application.Abstraction.Messaging;
+global using Application.Contracts.Common;
