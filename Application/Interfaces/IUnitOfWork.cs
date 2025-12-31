@@ -5,6 +5,7 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<Category> Categories { get; }
     IGenericRepositoryWithPagination<Product> Products { get; }
     IRoleRepository Roles { get; }
+    IGenericRepository<Domain.Entities.Type> Types { get; }
     IUserRepository Users { get; }
 
     /// <summary>Save changes to the database</summary>
