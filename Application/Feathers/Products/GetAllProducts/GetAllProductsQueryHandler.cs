@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Product.GetAllProducts;
+﻿namespace Application.Feathers.Products.GetAllProducts;
 
 public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllProductsQuery, IPaginatedList<ProductResponse>>
 {

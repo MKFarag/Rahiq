@@ -13,6 +13,10 @@ public sealed class Product
     public int DiscountPercentage { get; set; }
     public bool IsAvailable { get; set; }
 
+    public decimal SellingPrice => DiscountPercentage > 0
+        ? Price - (Price * DiscountPercentage)
+        : Price;
+
     public Category Category { get; set; } = default!;
     public Type Type { get; set; } = default!;
 }
