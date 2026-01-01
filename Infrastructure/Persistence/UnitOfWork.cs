@@ -7,9 +7,11 @@ public sealed class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext _context;
     private bool _disposed = false;
 
+    public IGenericRepository<Cart> Carts { get; private set; }
     public IGenericRepository<Category> Categories { get; private set; }
     public IGenericRepositoryWithPagination<Product> Products { get; private set; }
     public IRoleRepository Roles { get; private set; }
+    public IGenericRepository<Shipping> Shipping { get; private set; }
     public IGenericRepository<Domain.Entities.Type> Types { get; private set; }
     public IUserRepository Users { get; private set; }
 
@@ -20,9 +22,11 @@ public sealed class UnitOfWork : IUnitOfWork
     {
         _context = context;
 
+        Carts = new GenericRepository<Cart>(_context);
         Categories = new GenericRepository<Category>(_context);
         Products = new GenericRepositoryWithPagination<Product>(_context);
         Roles = new RoleRepository(_context, roleManager);
+        Shipping = new GenericRepository<Shipping>(_context);
         Types = new GenericRepository<Domain.Entities.Type>(_context);
         Users = new UserRepository(_context, userManager);
     }

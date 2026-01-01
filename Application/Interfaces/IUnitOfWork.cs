@@ -2,9 +2,11 @@
 
 public interface IUnitOfWork : IDisposable
 {
+    IGenericRepository<Cart> Carts { get; }
     IGenericRepository<Category> Categories { get; }
     IGenericRepositoryWithPagination<Product> Products { get; }
     IRoleRepository Roles { get; }
+    IGenericRepository<Shipping> Shipping { get; }
     IGenericRepository<Domain.Entities.Type> Types { get; }
     IUserRepository Users { get; }
 
