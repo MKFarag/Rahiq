@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using Application.Contracts.Files;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
@@ -71,4 +72,10 @@ public static class Extensions
         public string? GetId()
             => user.FindFirstValue(ClaimTypes.NameIdentifier);
     }
+
+    public static FileData ToFileData(this IFormFile formFile)
+        => new(formFile.FileName, formFile.ContentType, formFile.Length, formFile.OpenReadStream());
+
+    public static IEnumerable<FileData> ToFileData(this IFormFileCollection formFiles)
+        => formFiles.Select(f => f.ToFileData());
 }

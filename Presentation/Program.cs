@@ -58,4 +58,6 @@ app.MapControllers();
 
 app.UseExceptionHandler();
 
+app.MapStaticAssets();
+
 app.Run();
