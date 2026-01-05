@@ -14,7 +14,7 @@ public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
             (
                 x => (request.IncludeNotAvailable || x.IsAvailable),
                 filters.PageNumber, filters.PageSize, filters.SearchValue, filters.SearchColumn, filters.SortColumn!, filters.SortDirection!, ColumnType.String,
-                [nameof(Domain.Entities.Category), nameof(Domain.Entities.Type)],
+                [nameof(Product.Category), nameof(Product.Type)],
                 cancellationToken
             );
 

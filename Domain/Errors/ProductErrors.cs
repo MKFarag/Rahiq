@@ -7,4 +7,7 @@ public record ProductErrors
 
     public static readonly Error Percentage =
         new("Product.Percentage", "Invalid percentage value", StatusCodes.BadRequest);
+
+    public static readonly Error NotAvailable =
+        new("Product.NotAvailable", "This product is not available right now", StatusCodes.BadRequest);
 }
