@@ -28,6 +28,12 @@ public class ProductRequestValidator : AbstractValidator<ProductRequest>
         RuleFor(x => x.Description)
             .NotEmpty();
 
+        RuleFor(x => x.CategoryId)
+            .NotEmpty();
+
+        RuleFor(x => x.TypeId)
+            .NotEmpty();
+
         RuleFor(x => x.Price)
             .NotEmpty()
             .PrecisionScale(5, 2, true);
@@ -35,6 +41,9 @@ public class ProductRequestValidator : AbstractValidator<ProductRequest>
         RuleFor(x => x.DiscountPercentage)
             .NotEmpty()
             .InclusiveBetween(0, 100);
+
+        RuleFor(x => x.IsAvailable)
+            .NotEmpty();
     }
 }
 

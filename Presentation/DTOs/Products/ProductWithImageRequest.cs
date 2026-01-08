@@ -4,7 +4,7 @@ namespace Presentation.DTOs.Products;
 
 public record ProductWithImageRequest(
     ProductRequest Product,
-    IFormFile Image
+    IFormFile? Image
 );
 
 #region Validation
@@ -16,10 +16,11 @@ public class ProductWithImageRequestValidator : AbstractValidator<ProductWithIma
         RuleFor(x => x.Product)
             .SetValidator(new ProductRequestValidator());
 
-        RuleFor(x => x.Image)
-            .SetValidator(new FileSizeValidator())
-            .SetValidator(new BlockedSignaturesValidator())
-            .SetValidator(new ImageExtensionValidator());
+        When(x => x.Image is not null, () =>
+            RuleFor(x => x.Image)
+                .SetValidator(new FileSizeValidator()!)
+                .SetValidator(new BlockedSignaturesValidator()!)
+                .SetValidator(new ImageExtensionValidator()!));
     }
 }
 

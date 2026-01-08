@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Presentation.Abstraction;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using System.Reflection;
 using System.Text;
 
 #endregion
@@ -30,7 +31,7 @@ public static class DependencyInjection
             services.AddInfrastructureDependencies(configuration);
             services.AddHangfireConfig(configuration);
             services.AddApplicationDependencies();
-            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationConfig();
             services.AddMailConfig(configuration);
             services.AddAuthConfig(configuration);
 
@@ -131,6 +132,15 @@ public static class DependencyInjection
             #endregion
 
             #endregion
+
+            return services;
+        }
+
+        private IServiceCollection AddFluentValidationConfig()
+        {
+            services
+                .AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly(), typeof(Application.DependencyInjection).Assembly])
+                .AddFluentValidationAutoValidation();
 
             return services;
         }

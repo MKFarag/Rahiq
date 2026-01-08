@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using StatusCodes = Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Presentation.Abstraction;
 
-public class GlobalExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
+    private readonly ILogger<GlobalExceptionHandler> _logger = logger;
+
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
+#pragma warning disable CA1873
+        _logger.LogError(exception, "Something went wrong: {Message}", exception.Message);
+#pragma warning restore CA1873
+
         var problemDetails = new ProblemDetails
         {
             Status = StatusCodes.Status500InternalServerError,
