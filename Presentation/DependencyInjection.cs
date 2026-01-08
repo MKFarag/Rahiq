@@ -34,6 +34,7 @@ public static class DependencyInjection
             services.AddMailConfig(configuration);
             services.AddAuthConfig(configuration);
 
+            services.AddScoped<IFileStorageService, FileStorageService>();
             services.AddScoped<ISignInService, SignInService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUrlEncoder, UrlEncoder>();

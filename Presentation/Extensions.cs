@@ -1,8 +1,10 @@
 ﻿#region Usings
 
 using Application.Contracts.Files;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NSwag;
 using NSwag.Generation;
 using NSwag.Generation.AspNetCore;
@@ -64,6 +66,19 @@ public static class Extensions
             options.Description = $"The official API of Rahiq store.";
 
             return options;
+        }
+    }
+
+    extension(ControllerBase controller)
+    {
+        internal IActionResult ToProblem(ValidationResult result)
+        {
+            var modelState = new ModelStateDictionary();
+
+            foreach (var error in result.Errors)
+                modelState.AddModelError(error.PropertyName, error.ErrorMessage);
+
+            return controller.ValidationProblem(modelState);
         }
     }
 

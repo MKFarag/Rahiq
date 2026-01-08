@@ -10,4 +10,7 @@ public record ProductErrors
 
     public static readonly Error NotAvailable =
         new("Product.NotAvailable", "This product is not available right now", StatusCodes.BadRequest);
+
+    public static readonly Error DuplicatedName =
+        new("Product.DuplicatedName", "This name is already exist", StatusCodes.Conflict);
 }

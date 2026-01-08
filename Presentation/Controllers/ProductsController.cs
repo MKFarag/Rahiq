@@ -1,8 +1,10 @@
 ﻿using Application.Contracts.Products;
+using Application.Feathers.Products.AddProduct;
 using Application.Feathers.Products.AddProductDiscount;
 using Application.Feathers.Products.ChangeProductStatus;
 using Application.Feathers.Products.GetAllProducts;
 using Application.Feathers.Products.GetProduct;
+using Presentation.DTOs.Products;
 
 namespace Presentation.Controllers;
 
@@ -23,6 +25,23 @@ public class ProductsController(ISender sender) : ControllerBase
 
         return result.IsSuccess
             ? Ok(result.Value)
+            : result.ToProblem();
+    }
+
+    [HttpPost("")]
+    public async Task<IActionResult> Add([FromForm] ProductWithImageRequest request, [FromServices] IValidator<ProductWithImageRequest> validator, CancellationToken cancellationToken)
+    {
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+            return this.ToProblem(validationResult);
+
+        using var image = request.Image.ToFileData();
+
+        var result = await _sender.Send(new AddProductCommand(request.Product, image), cancellationToken);
+
+        return result.IsSuccess
+            ? CreatedAtAction(nameof(Get), new { result.Value.Id }, result.Value)
             : result.ToProblem();
     }
 
