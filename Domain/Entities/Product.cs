@@ -14,7 +14,7 @@ public sealed class Product
     public bool IsAvailable { get; set; }
 
     public decimal SellingPrice => DiscountPercentage > 0
-        ? Price - (Price * DiscountPercentage)
+        ? Price.ApplyDiscount(DiscountPercentage)
         : Price;
 
     public Category Category { get; set; } = default!;

@@ -16,3 +16,4 @@ global using Application.Contracts.Products;
 global using Application.Contracts.Types;
 global using Application.Contracts.Carts;
 global using Application.Contracts.Files;
+global using Application.Contracts.Bundles;

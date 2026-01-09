@@ -7,6 +7,8 @@ public sealed class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext _context;
     private bool _disposed = false;
 
+    public IGenericRepository<Bundle> Bundles { get; private set; }
+    public IGenericRepository<BundleItem> BundleItems { get; private set; }
     public ICartRepository Carts { get; private set; }
     public IGenericRepository<Category> Categories { get; private set; }
     public IGenericRepositoryWithPagination<Product> Products { get; private set; }
@@ -22,6 +24,8 @@ public sealed class UnitOfWork : IUnitOfWork
     {
         _context = context;
 
+        Bundles = new GenericRepository<Bundle>(_context);
+        BundleItems = new GenericRepository<BundleItem>(_context);
         Carts = new CartRepository(_context);
         Categories = new GenericRepository<Category>(_context);
         Products = new GenericRepositoryWithPagination<Product>(_context);
