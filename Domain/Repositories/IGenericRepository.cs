@@ -149,6 +149,48 @@ public interface IGenericRepository<TEntity> where TEntity : class
     /// <param name="entities">Entities to update</param>
     IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities);
 
+    /// <summary>Executes a bulk update operation on entities matching the predicate, updating a single property</summary>
+    /// <typeparam name="TValue">The type of the property to update</typeparam>
+    /// <param name="predicate">Filter expression to match entities</param>
+    /// <param name="propertyName">Name of the property to update</param>
+    /// <param name="newValue">New value for the property</param>
+    Task<int> ExecuteUpdateAsync<TValue>(
+        Expression<Func<TEntity, bool>> predicate,
+        string propertyName, TValue newValue,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Executes a bulk update operation on entities matching the predicate, updating two properties</summary>
+    /// <typeparam name="TValue1">The type of the first property to update</typeparam>
+    /// <typeparam name="TValue2">The type of the second property to update</typeparam>
+    /// <param name="predicate">Filter expression to match entities</param>
+    /// <param name="prop1">Name of the first property to update</param>
+    /// <param name="val1">New value for the first property</param>
+    /// <param name="prop2">Name of the second property to update</param>
+    /// <param name="val2">New value for the second property</param>
+    Task<int> ExecuteUpdateAsync<TValue1, TValue2>(
+        Expression<Func<TEntity, bool>> predicate,
+        string prop1, TValue1 val1,
+        string prop2, TValue2 val2,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Executes a bulk update operation on entities matching the predicate, updating three properties</summary>
+    /// <typeparam name="TValue1">The type of the first property to update</typeparam>
+    /// <typeparam name="TValue2">The type of the second property to update</typeparam>
+    /// <typeparam name="TValue3">The type of the third property to update</typeparam>
+    /// <param name="predicate">Filter expression to match entities</param>
+    /// <param name="prop1">Name of the first property to update</param>
+    /// <param name="val1">New value for the first property</param>
+    /// <param name="prop2">Name of the second property to update</param>
+    /// <param name="val2">New value for the second property</param>
+    /// <param name="prop3">Name of the third property to update</param>
+    /// <param name="val3">New value for the third property</param>
+    Task<int> ExecuteUpdateAsync<TValue1, TValue2, TValue3>(
+       Expression<Func<TEntity, bool>> predicate,
+       string prop1, TValue1 val1,
+       string prop2, TValue2 val2,
+       string prop3, TValue3 val3,
+       CancellationToken cancellationToken = default);
+
     #endregion
 
     #region Helpers

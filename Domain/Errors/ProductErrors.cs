@@ -13,4 +13,7 @@ public record ProductErrors
 
     public static readonly Error DuplicatedName =
         new("Product.DuplicatedName", "This name is already exist", StatusCodes.Conflict);
+
+    public static readonly Error NoImage =
+        new("Product.NoImage", "No image is exist", StatusCodes.NotFound);
 }

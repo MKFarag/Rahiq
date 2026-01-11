@@ -1,4 +1,4 @@
 ﻿namespace Application.Feathers.Products.AddProduct;
 
-public record AddProductCommand(ProductRequest Request, FileData Image) : IRequest<Result<ProductResponse>>;
+public record AddProductCommand(ProductRequest Request, FileData? Image) : IRequest<Result<ProductResponse>>;
 

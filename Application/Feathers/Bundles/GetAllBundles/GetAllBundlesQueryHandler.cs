@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Bundles;
+﻿namespace Application.Feathers.Bundles.GetAllBundles;
 
 public class GetAllBundlesQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllBundlesQuery, IEnumerable<BundleResponse>>
 {

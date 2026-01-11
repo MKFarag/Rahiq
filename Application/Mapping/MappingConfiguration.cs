@@ -8,5 +8,9 @@ public class MappingConfiguration : IRegister
             .Map(dest => dest.Category, src => src.Category.Name)
             .Map(dest => dest.Type, src => src.Type.Name)
             .Map(dest => dest.StandardPrice, src => src.Price);
+
+        config.NewConfig<Bundle, BundleDetailResponse>()
+            .Map(dest => dest.Bundle, src => src)
+            .Map(dest => dest.Products, src => src.BundleItems.Select(x => x.Product));
     }
 }

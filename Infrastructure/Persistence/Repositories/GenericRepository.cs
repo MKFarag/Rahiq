@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Persistence.Repositories;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
+namespace Infrastructure.Persistence.Repositories;
 
 public class GenericRepository<TEntity>(ApplicationDbContext context) : IGenericRepository<TEntity> where TEntity : class
 {
@@ -139,6 +141,39 @@ public class GenericRepository<TEntity>(ApplicationDbContext context) : IGeneric
         _dbSet.UpdateRange(entities);
         return entities;
     }
+
+    public async Task<int> ExecuteUpdateAsync<TValue>(
+        Expression<Func<TEntity, bool>> predicate,
+        string propertyName, TValue newValue,
+        CancellationToken cancellationToken = default)
+        => await _dbSet.Where(predicate)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(e => EF.Property<TValue>(e, propertyName), newValue)
+            , cancellationToken);
+
+    public async Task<int> ExecuteUpdateAsync<TValue1, TValue2>(
+        Expression<Func<TEntity, bool>> predicate,
+        string prop1, TValue1 val1,
+        string prop2, TValue2 val2,
+        CancellationToken cancellationToken = default)
+        => await _dbSet.Where(predicate)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(e => EF.Property<TValue1>(e, prop1), val1)
+                .SetProperty(e => EF.Property<TValue2>(e, prop2), val2)
+            , cancellationToken);
+
+    public async Task<int> ExecuteUpdateAsync<TValue1, TValue2, TValue3>(
+        Expression<Func<TEntity, bool>> predicate,
+        string prop1, TValue1 val1,
+        string prop2, TValue2 val2,
+        string prop3, TValue3 val3,
+        CancellationToken cancellationToken = default)
+        => await _dbSet.Where(predicate)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(e => EF.Property<TValue1>(e, prop1), val1)
+                .SetProperty(e => EF.Property<TValue2>(e, prop2), val2)
+                .SetProperty(e => EF.Property<TValue3>(e, prop3), val3)
+            , cancellationToken);
 
     #endregion
 

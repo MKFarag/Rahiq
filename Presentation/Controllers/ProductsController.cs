@@ -2,6 +2,7 @@
 using Application.Feathers.Products.AddProduct;
 using Application.Feathers.Products.AddProductDiscount;
 using Application.Feathers.Products.ChangeProductStatus;
+using Application.Feathers.Products.DeleteProductImage;
 using Application.Feathers.Products.GetAllProducts;
 using Application.Feathers.Products.GetProduct;
 using Presentation.DTOs.Products;
@@ -36,7 +37,7 @@ public class ProductsController(ISender sender) : ControllerBase
         if (!validationResult.IsValid)
             return this.ToProblem(validationResult);
 
-        using var image = request.Image.ToFileData();
+        using var image = request.Image?.ToFileData();
 
         var result = await _sender.Send(new AddProductCommand(request.Product, image), cancellationToken);
 
@@ -62,6 +63,16 @@ public class ProductsController(ISender sender) : ControllerBase
 
         return result.IsSuccess
             ? Ok()
+            : result.ToProblem();
+    }
+
+    [HttpDelete("image/{id}")]
+    public async Task<IActionResult> DeleteImage([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new DeleteProductImageCommand(id), cancellationToken);
+
+        return result.IsSuccess
+            ? NoContent()
             : result.ToProblem();
     }
 }

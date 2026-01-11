@@ -4,7 +4,7 @@ public interface IUnitOfWork : IDisposable
 {
     IGenericRepository<Bundle> Bundles { get; }
     IGenericRepository<BundleItem> BundleItems { get; }
-    ICartRepository Carts { get; }
+    IGenericRepository<Cart> Carts { get; }
     IGenericRepository<Category> Categories { get; }
     IGenericRepositoryWithPagination<Product> Products { get; }
     IRoleRepository Roles { get; }

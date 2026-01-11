@@ -8,7 +8,7 @@ public sealed class Product
     public int CategoryId { get; set; }
     public int TypeId { get; set; }
     public string Description { get; set; } = string.Empty;
-    public string ImageUrl { get; set; } = string.Empty;
+    public string? ImageUrl { get; set; }
     public decimal Price { get; set; }
     public int DiscountPercentage { get; set; }
     public bool IsAvailable { get; set; }

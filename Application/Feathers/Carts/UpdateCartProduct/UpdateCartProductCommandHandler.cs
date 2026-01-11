@@ -31,10 +31,16 @@ public class UpdateCartProductCommandHandler(IUnitOfWork unitOfWork) : IRequestH
         }
         else
         {
-            if (request.Quantity == 0)
+            if (request.Quantity > 0)
+                await _unitOfWork.Carts
+                    .ExecuteUpdateAsync
+                    (
+                        x => x.ProductId == request.ProductId && x.CustomerId == request.UserId,
+                        nameof(Cart.Quantity), request.Quantity,
+                        cancellationToken
+                    );
+            else if (request.Quantity == 0)
                 await _unitOfWork.Carts.ExecuteDeleteAsync(x => x.ProductId == request.ProductId && x.CustomerId == request.UserId, cancellationToken);
-            else if (request.Quantity > 0)
-                await _unitOfWork.Carts.ExecuteChangeQuantityAsync(request.ProductId, request.UserId, request.Quantity);
             else
                 return Result.Failure(CartErrors.InvalidQuantity);
         }
