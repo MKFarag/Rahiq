@@ -13,4 +13,7 @@ public record BundleErrors
 
     public static readonly Error ImageExist =
         new("Bundle.ImageExist", "This bundle already has an image", StatusCodes.BadRequest);
+
+    public static readonly Error IsActive =
+        new("Bundle.IsActive", "This bundle is already active", StatusCodes.BadRequest);
 }
