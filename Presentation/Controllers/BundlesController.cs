@@ -1,8 +1,13 @@
 ﻿using Application.Contracts.Bundles;
 using Application.Feathers.Bundles.AddBundle;
+using Application.Feathers.Bundles.AddBundleImage;
+using Application.Feathers.Bundles.DeleteBundleImage;
 using Application.Feathers.Bundles.GetAllBundles;
 using Application.Feathers.Bundles.GetBundle;
+using Application.Feathers.Products.AddProductImage;
+using Application.Feathers.Products.DeleteProductImage;
 using Presentation.DTOs.Bundles;
+using Presentation.DTOs.Files;
 
 namespace Presentation.Controllers;
 
@@ -40,6 +45,33 @@ public class BundlesController(ISender sender) : ControllerBase
 
         return result.IsSuccess
             ? CreatedAtAction(nameof(Get), new { result.Value.Bundle.Id }, result.Value)
+            : result.ToProblem();
+    }
+
+    [HttpPut("image/{id}")]
+    public async Task<IActionResult> AddImage([FromRoute] int id, [FromForm] UploadImageRequest request, [FromServices] IValidator<UploadImageRequest> validator, CancellationToken cancellationToken)
+    {
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+            return this.ToProblem(validationResult);
+
+        using var image = request.Image.ToFileData();
+
+        var result = await _sender.Send(new AddBundleImageCommand(id, image), cancellationToken);
+
+        return result.IsSuccess
+            ? NoContent()
+            : result.ToProblem();
+    }
+
+    [HttpDelete("image/{id}")]
+    public async Task<IActionResult> DeleteImage([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new DeleteBundleImageCommand(id), cancellationToken);
+
+        return result.IsSuccess
+            ? NoContent()
             : result.ToProblem();
     }
 }

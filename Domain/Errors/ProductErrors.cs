@@ -16,4 +16,7 @@ public record ProductErrors
 
     public static readonly Error NoImage =
         new("Product.NoImage", "No image is exist", StatusCodes.NotFound);
+
+    public static readonly Error ImageExist =
+        new("Product.ImageExist", "This product already has an image", StatusCodes.BadRequest);
 }

@@ -1,10 +1,12 @@
 ﻿using Application.Contracts.Products;
 using Application.Feathers.Products.AddProduct;
 using Application.Feathers.Products.AddProductDiscount;
+using Application.Feathers.Products.AddProductImage;
 using Application.Feathers.Products.ChangeProductStatus;
 using Application.Feathers.Products.DeleteProductImage;
 using Application.Feathers.Products.GetAllProducts;
 using Application.Feathers.Products.GetProduct;
+using Presentation.DTOs.Files;
 using Presentation.DTOs.Products;
 
 namespace Presentation.Controllers;
@@ -57,12 +59,29 @@ public class ProductsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("discount/{id}")]
-    public async Task<IActionResult> AddDiscount([FromRoute] int id, [FromBody] ProductDiscountRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Discount([FromRoute] int id, [FromBody] ProductDiscountRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new AddProductDiscountCommand(id, request.DiscountPercentage), cancellationToken);
 
         return result.IsSuccess
             ? Ok()
+            : result.ToProblem();
+    }
+
+    [HttpPut("image/{id}")]
+    public async Task<IActionResult> AddImage([FromRoute] int id, [FromForm] UploadImageRequest request, [FromServices] IValidator<UploadImageRequest> validator, CancellationToken cancellationToken)
+    {
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+            return this.ToProblem(validationResult);
+
+        using var image = request.Image.ToFileData();
+
+        var result = await _sender.Send(new AddProductImageCommand(id, image), cancellationToken);
+
+        return result.IsSuccess
+            ? NoContent()
             : result.ToProblem();
     }
 

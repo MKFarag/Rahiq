@@ -6,7 +6,7 @@ public sealed class Bundle
     public string Name { get; set; } = string.Empty;
     public int DiscountPercentage { get; set; }
     public int QuantityAvailable { get; set; }
-    public string ImageUrl { get; set; } = string.Empty; 
+    public string? ImageUrl { get; set; }
     public DateOnly EndAt { get; set; }
 
     public bool IsActive => EndAt >= DateOnly.FromDateTime(DateTime.UtcNow) && QuantityAvailable > 0;
