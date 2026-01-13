@@ -12,12 +12,20 @@ public class AddBundleCommandHandler(IUnitOfWork unitOfWork, IFileStorageService
 
         var allowedProductsId = await _unitOfWork.Products.FindAllProjectionAsync(x => x.IsAvailable, x => x.Id, true, cancellationToken);
 
-        if (!allowedProductsId.Any() || command.Request.ProductsId.Except(allowedProductsId).Any())
+        var requestedProductIds = command.Request.ProductsId.ToHashSet();
+
+        if (!allowedProductsId.Any() || requestedProductIds.Except(allowedProductsId).Any())
             return Result.Failure<BundleDetailResponse>(ProductErrors.NotFound);
+
+        var bundlesWithSameCount = await _unitOfWork.Bundles
+            .FindAllAsync(b => b.BundleItems.Count == requestedProductIds.Count, [nameof(Bundle.BundleItems)], cancellationToken);
+
+        if (bundlesWithSameCount.Any(b => requestedProductIds.SetEquals(b.BundleItems.Select(bi => bi.ProductId))))
+            return Result.Failure<BundleDetailResponse>(BundleErrors.DuplicatedProducts);
 
         var bundle = command.Request.Adapt<Bundle>();
 
-        foreach (var id in command.Request.ProductsId)
+        foreach (var id in requestedProductIds)
             bundle.BundleItems.Add(new BundleItem { ProductId = id });
 
         await _unitOfWork.Bundles.AddAsync(bundle, cancellationToken);
