@@ -1,13 +1,17 @@
-﻿using Application.Contracts.Bundles;
+﻿#region Usings
+
+using Application.Contracts.Bundles;
 using Application.Feathers.Bundles.AddBundle;
 using Application.Feathers.Bundles.AddBundleImage;
+using Application.Feathers.Bundles.DeactivateBundle;
 using Application.Feathers.Bundles.DeleteBundleImage;
 using Application.Feathers.Bundles.GetAllBundles;
 using Application.Feathers.Bundles.GetBundle;
-using Application.Feathers.Products.AddProductImage;
-using Application.Feathers.Products.DeleteProductImage;
+using Application.Feathers.Bundles.ReactivateBundle;
+using Application.Feathers.Bundles.UpdateBundle;
 using Presentation.DTOs.Bundles;
-using Presentation.DTOs.Files;
+
+#endregion
 
 namespace Presentation.Controllers;
 
@@ -48,6 +52,16 @@ public class BundlesController(ISender sender) : ControllerBase
             : result.ToProblem();
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] BundleRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new UpdateBundleCommand(id, request), cancellationToken);
+
+        return result.IsSuccess
+            ? NoContent()
+            : result.ToProblem();
+    }
+
     [HttpPut("image/{id}")]
     public async Task<IActionResult> AddImage([FromRoute] int id, [FromForm] UploadImageRequest request, [FromServices] IValidator<UploadImageRequest> validator, CancellationToken cancellationToken)
     {
@@ -72,6 +86,26 @@ public class BundlesController(ISender sender) : ControllerBase
 
         return result.IsSuccess
             ? NoContent()
+            : result.ToProblem();
+    }
+
+    [HttpPut("{id}/deactivate")]
+    public async Task<IActionResult> Deactivate([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new DeactivateBundleCommand(id), cancellationToken);
+
+        return result.IsSuccess
+            ? Ok()
+            : result.ToProblem();
+    }
+
+    [HttpPut("{id}/reactivate")]
+    public async Task<IActionResult> Reactivate([FromRoute] int id, [FromBody] ReactivateBundleRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new ReactivateBundleCommand(id, request.EndAt, request.QuantityAvailable), cancellationToken);
+
+        return result.IsSuccess
+            ? Ok()
             : result.ToProblem();
     }
 }

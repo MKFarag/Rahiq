@@ -9,3 +9,4 @@ global using FluentValidation;
 global using Domain.Settings;
 global using Presentation.DTOs.Common;
 global using Microsoft.AspNetCore.Authorization;
+global using Presentation.DTOs.Files;

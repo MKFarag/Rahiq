@@ -5,5 +5,5 @@ public record CartProductResponse(
     string Name,
     decimal CurrentPrice,
     int Quantity,
-    string MainImageUrl
+    string? MainImageUrl
 );
