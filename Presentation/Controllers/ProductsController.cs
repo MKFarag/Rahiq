@@ -1,4 +1,6 @@
-﻿using Application.Contracts.Products;
+﻿#region Usings
+
+using Application.Contracts.Products;
 using Application.Feathers.Products.AddProduct;
 using Application.Feathers.Products.AddProductDiscount;
 using Application.Feathers.Products.AddProductImage;
@@ -6,7 +8,10 @@ using Application.Feathers.Products.ChangeProductStatus;
 using Application.Feathers.Products.DeleteProductImage;
 using Application.Feathers.Products.GetAllProducts;
 using Application.Feathers.Products.GetProduct;
+using Application.Feathers.Products.UpdateProduct;
 using Presentation.DTOs.Products;
+
+#endregion
 
 namespace Presentation.Controllers;
 
@@ -44,6 +49,16 @@ public class ProductsController(ISender sender) : ControllerBase
 
         return result.IsSuccess
             ? CreatedAtAction(nameof(Get), new { result.Value.Id }, result.Value)
+            : result.ToProblem();
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new UpdateProductCommand(id, request), cancellationToken);
+
+        return result.IsSuccess
+            ? NoContent()
             : result.ToProblem();
     }
 

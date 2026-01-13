@@ -5,7 +5,7 @@ public record ProductRequest(
     string Brand,
     string Description,
     int CategoryId,
-    string TypeId,
+    int TypeId,
     decimal Price,
     int DiscountPercentage,
     bool IsAvailable

@@ -1,7 +1,6 @@
 ﻿using Application.Contracts.Carts;
 using Application.Feathers.Carts.ClearMyCart;
 using Application.Feathers.Carts.GetMyCart;
-using Application.Feathers.Carts.RemoveCartProduct;
 using Application.Feathers.Carts.UpdateCartProduct;
 
 namespace Presentation.Controllers;
@@ -21,16 +20,6 @@ public class CartsController(ISender sender) : ControllerBase
     public async Task<IActionResult> UpdateCartProduct([FromBody] UpdateCartProductRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new UpdateCartProductCommand(User.GetId()!, request.ProductId, request.Quantity), cancellationToken);
-
-        return result.IsSuccess
-            ? NoContent()
-            : result.ToProblem();
-    }
-
-    [HttpPut("remove-product/{productId}")]
-    public async Task<IActionResult> RemoveProduct([FromRoute] int productId, CancellationToken cancellationToken)
-    {
-        var result = await _sender.Send(new RemoveCartProductCommand(User.GetId()!, productId), cancellationToken);
 
         return result.IsSuccess
             ? NoContent()
