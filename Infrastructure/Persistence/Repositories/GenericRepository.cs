@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
-namespace Infrastructure.Persistence.Repositories;
+﻿namespace Infrastructure.Persistence.Repositories;
 
 public class GenericRepository<TEntity>(ApplicationDbContext context) : IGenericRepository<TEntity> where TEntity : class
 {

@@ -6,7 +6,6 @@ using Application.Feathers.Products.ChangeProductStatus;
 using Application.Feathers.Products.DeleteProductImage;
 using Application.Feathers.Products.GetAllProducts;
 using Application.Feathers.Products.GetProduct;
-using Presentation.DTOs.Files;
 using Presentation.DTOs.Products;
 
 namespace Presentation.Controllers;

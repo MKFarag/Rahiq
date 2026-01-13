@@ -1,6 +1,4 @@
-﻿using Application.Interfaces;
-
-namespace Application.Feathers.Bundles.UpdateBundle;
+﻿namespace Application.Feathers.Bundles.UpdateBundle;
 
 public class UpdateBundleCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateBundleCommand, Result>
 {
@@ -29,7 +27,7 @@ public class UpdateBundleCommandHandler(IUnitOfWork unitOfWork) : IRequestHandle
 
             if (!allowedProductsId.Any() || command.Request.ProductsId.Except(allowedProductsId).Any())
                 return Result.Failure(ProductErrors.NotFound);
-            
+
             await _unitOfWork.BundleItems.ExecuteDeleteAsync(x => x.BundleId == command.Id, cancellationToken);
 
             foreach (var id in command.Request.ProductsId)

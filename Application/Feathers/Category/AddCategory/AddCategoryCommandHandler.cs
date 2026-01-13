@@ -11,7 +11,7 @@ public class AddCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
 
         var category = new Domain.Entities.Category
         {
-           Name = command.Request.Name
+            Name = command.Request.Name
         };
 
         await _unitOfWork.Categories.AddAsync(category, cancellationToken);

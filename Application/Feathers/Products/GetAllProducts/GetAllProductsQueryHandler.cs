@@ -19,5 +19,5 @@ public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
             );
 
         return response;
-    }       
+    }
 }

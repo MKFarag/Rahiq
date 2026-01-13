@@ -15,7 +15,7 @@ public class DeleteTypeCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         _unitOfWork.Types.Delete(type);
 
         await _unitOfWork.CompleteAsync(cancellationToken);
-        
+
         return Result.Success();
     }
 }

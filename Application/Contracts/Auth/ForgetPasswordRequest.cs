@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Application.Contracts.Auth;
+﻿namespace Application.Contracts.Auth;
 
 public record ForgetPasswordRequest(
     string Email,

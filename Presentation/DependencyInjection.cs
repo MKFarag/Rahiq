@@ -2,7 +2,6 @@
 
 using Application;
 using Application.Interfaces;
-using Domain.Settings;
 using Hangfire;
 using Infrastructure;
 using Infrastructure.Authentication;

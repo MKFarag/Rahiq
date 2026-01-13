@@ -43,7 +43,7 @@ public class BundlesController(ISender sender) : ControllerBase
         if (!validationResult.IsValid)
             return this.ToProblem(validationResult);
 
-        using var image = request.Image?.ToFileData(); 
+        using var image = request.Image?.ToFileData();
 
         var result = await _sender.Send(new AddBundleCommand(request.Bundle, image), cancellationToken);
 

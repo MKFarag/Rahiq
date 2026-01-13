@@ -1,14 +1,14 @@
 ﻿#region Usings
 
-using Application.Feathers.Auth.GetToken;
 using Application.Contracts.Auth;
-using Application.Feathers.Auth.GetRefreshToken;
-using Application.Feathers.Auth.RevokeRefreshToken;
-using Application.Feathers.Auth.Register;
 using Application.Feathers.Auth.ConfirmEmail;
+using Application.Feathers.Auth.GetRefreshToken;
+using Application.Feathers.Auth.GetToken;
+using Application.Feathers.Auth.Register;
 using Application.Feathers.Auth.ResendConfirmationEmail;
-using Application.Feathers.Auth.SendResetPasswordCode;
 using Application.Feathers.Auth.ResetPassword;
+using Application.Feathers.Auth.RevokeRefreshToken;
+using Application.Feathers.Auth.SendResetPasswordCode;
 
 #endregion
 

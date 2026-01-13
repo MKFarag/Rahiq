@@ -4,7 +4,6 @@ using Application.Feathers.Types.AddType;
 using Application.Feathers.Types.DeleteType;
 using Application.Feathers.Types.GetAllTypes;
 using Application.Feathers.Types.UpdateType;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Presentation.Controllers;
 

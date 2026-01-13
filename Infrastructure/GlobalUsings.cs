@@ -1,4 +1,5 @@
-﻿global using Application.Interfaces;
+﻿global using Application.Abstraction.Messaging;
+global using Application.Interfaces;
 global using Domain.Abstraction;
 global using Domain.Constants;
 global using Domain.Entities;
@@ -15,4 +16,3 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.Extensions.Options;
 global using System.Linq.Expressions;
 global using System.Text;
-global using Application.Abstraction.Messaging;

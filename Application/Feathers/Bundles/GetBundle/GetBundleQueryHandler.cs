@@ -10,7 +10,7 @@ public class GetBundleQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
             .FindAsync
             (
                 x => x.Id == request.Id,
-                [   
+                [
                     $"{nameof(Bundle.BundleItems)}.{nameof(BundleItem.Product)}.{nameof(Product.Type)}",
                     $"{nameof(Bundle.BundleItems)}.{nameof(BundleItem.Product)}.{nameof(Product.Type)}"
                 ],

@@ -1,6 +1,4 @@
-﻿using System.Xml.Schema;
-
-namespace Application.Contracts.Bundles;
+﻿namespace Application.Contracts.Bundles;
 
 public record BundleRequest(
     string Name,
