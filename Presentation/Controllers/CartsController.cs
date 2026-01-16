@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Carts;
+using Application.Feathers.Carts.AddToCart;
 using Application.Feathers.Carts.ClearMyCart;
 using Application.Feathers.Carts.GetMyCart;
 using Application.Feathers.Carts.UpdateCartProduct;
@@ -15,6 +16,16 @@ public class CartsController(ISender sender) : ControllerBase
     [HttpGet("")]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
         => Ok(await _sender.Send(new GetMyCartQuery(User.GetId()!), cancellationToken));
+
+    [HttpPost("{id}")]
+    public async Task<IActionResult> AddToCart([FromRoute] int id, [FromBody] CartQuantityRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new AddToCartCommand(User.GetId()!, id, request.Quantity, request.IsBundle), cancellationToken);
+
+        return result.IsSuccess
+            ? Created()
+            : result.ToProblem();
+    }
 
     [HttpPut("")]
     public async Task<IActionResult> UpdateCartProduct([FromBody] UpdateCartProductRequest request, CancellationToken cancellationToken)

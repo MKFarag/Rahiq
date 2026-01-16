@@ -11,6 +11,8 @@ public sealed class UnitOfWork : IUnitOfWork
     public IGenericRepository<BundleItem> BundleItems { get; private set; }
     public IGenericRepository<Cart> Carts { get; private set; }
     public IGenericRepository<Category> Categories { get; private set; }
+    public IGenericRepository<Order> Orders { get; private set; }
+    public IGenericRepository<OrderItem> OrderItems { get; private set; }
     public IGenericRepositoryWithPagination<Product> Products { get; private set; }
     public IRoleRepository Roles { get; private set; }
     public IGenericRepository<Shipping> Shipping { get; private set; }

@@ -1,6 +1,6 @@
 ﻿namespace Application.Contracts.Carts;
 
-public record CartProductResponse(
+public record CartBundleResponse(
     int Id,
     string Name,
     decimal UnitPrice,

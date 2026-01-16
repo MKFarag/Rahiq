@@ -12,5 +12,9 @@ public class MappingConfiguration : IRegister
         config.NewConfig<Bundle, BundleDetailResponse>()
             .Map(dest => dest.Bundle, src => src)
             .Map(dest => dest.Products, src => src.BundleItems.Select(x => x.Product));
+
+        config.NewConfig<Cart, CartResponse>()
+            .Map(dest => dest.CartProducts, src => src.Product)
+            .Map(dest => dest.CartBundle, src => src.Bundle);
     }
 }

@@ -17,3 +17,4 @@ global using Domain.Repositories;
 global using FluentValidation;
 global using Mapster;
 global using System.Linq.Expressions;
+global using Application.Contracts.Order;
