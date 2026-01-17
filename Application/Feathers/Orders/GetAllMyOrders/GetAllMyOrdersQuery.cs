@@ -1,4 +1,4 @@
 ﻿namespace Application.Feathers.Orders.GetAllMyOrders;
 
-public record GetAllMyOrdersQuery(string UserId, int Year) : IRequest<IEnumerable<OrderResponse>>;
+public record GetAllMyOrdersQuery(SimpleRequestFilters Filters, string UserId, int Year) : IRequest<IPaginatedList<OrderResponse>>;
 
