@@ -66,7 +66,7 @@ public class OrdersController(ISender sender) : ControllerBase
         var result = await _sender.Send(new AddOrderCommand(User.GetId()!), cancellationToken);
 
         return result.IsSuccess
-            ? CreatedAtAction(nameof(Add), new { result.Value.Id }, result.Value) // Fix it when we finish the Get EP
+            ? CreatedAtAction(nameof(GetById), new { result.Value.Id }, result.Value)
             : result.ToProblem();
     }
 

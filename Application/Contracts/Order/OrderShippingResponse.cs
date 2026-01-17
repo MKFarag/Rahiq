@@ -2,9 +2,8 @@
 
 public record OrderShippingResponse(
     string Id,
-    string Name,
     string Address,
-    string? Phone,
-    decimal Cost,
-    string Code
+    string Phone,
+    decimal? Cost,
+    string? Code
 );
