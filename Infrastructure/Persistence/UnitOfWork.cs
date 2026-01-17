@@ -11,7 +11,7 @@ public sealed class UnitOfWork : IUnitOfWork
     public IGenericRepository<BundleItem> BundleItems { get; private set; }
     public IGenericRepository<Cart> Carts { get; private set; }
     public IGenericRepository<Category> Categories { get; private set; }
-    public IGenericRepository<Order> Orders { get; private set; }
+    public IGenericRepositoryWithPagination<Order> Orders { get; private set; }
     public IGenericRepository<OrderItem> OrderItems { get; private set; }
     public IGenericRepositoryWithPagination<Product> Products { get; private set; }
     public IRoleRepository Roles { get; private set; }
@@ -30,6 +30,8 @@ public sealed class UnitOfWork : IUnitOfWork
         BundleItems = new GenericRepository<BundleItem>(_context);
         Carts = new GenericRepository<Cart>(_context);
         Categories = new GenericRepository<Category>(_context);
+        Orders = new GenericRepositoryWithPagination<Order>(_context);
+        OrderItems = new GenericRepository<OrderItem>(_context);
         Products = new GenericRepositoryWithPagination<Product>(_context);
         Roles = new RoleRepository(_context, roleManager);
         Shipping = new GenericRepository<Shipping>(_context);

@@ -3,5 +3,5 @@
 public record OrderItemResponse(
     OrderProductResponse Product,
     int Quantity,
-    decimal TotalPrice
+    decimal Total
 );

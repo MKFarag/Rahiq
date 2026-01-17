@@ -16,5 +16,8 @@ public class MappingConfiguration : IRegister
         config.NewConfig<Cart, CartResponse>()
             .Map(dest => dest.CartProducts, src => src.Product)
             .Map(dest => dest.CartBundle, src => src.Bundle);
+
+        config.NewConfig<Product, OrderProductResponse>()
+            .Map(dest => dest.UnitPrice, src => src.SellingPrice);
     }
 }

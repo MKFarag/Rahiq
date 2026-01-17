@@ -6,6 +6,24 @@ public class GenericRepositoryWithPagination<TEntity>(ApplicationDbContext conte
     private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
     public async Task<IPaginatedList<TProjection>> GetPaginatedListAsync<TProjection>(
+        int pageNumber, int pageSize, CancellationToken cancellationToken = default) where TProjection : class
+    {
+        var query = _dbSet.AsNoTracking().AsQueryable();
+
+        return await PaginatedList<TProjection>.CreateAsync(query.ProjectToType<TProjection>(), pageNumber, pageSize, cancellationToken);
+    }
+
+    public async Task<IPaginatedList<TProjection>> GetPaginatedListAsync<TProjection>(
+        int pageNumber, int pageSize, string[] includes, CancellationToken cancellationToken = default) where TProjection : class
+    {
+        var query = _dbSet.AsNoTracking().AsQueryable();
+
+        query = query.ApplyIncludesSafely(includes);
+
+        return await PaginatedList<TProjection>.CreateAsync(query.ProjectToType<TProjection>(), pageNumber, pageSize, cancellationToken);
+    }
+
+    public async Task<IPaginatedList<TProjection>> GetPaginatedListAsync<TProjection>(
         int pageNumber, int pageSize, string? searchValue, string? searchColumn, string sortColumn, string sortDirection,
         ColumnType searchColumnType, CancellationToken cancellationToken = default) where TProjection : class
     {
@@ -28,6 +46,26 @@ public class GenericRepositoryWithPagination<TEntity>(ApplicationDbContext conte
             .ApplySearchFilter(searchValue, searchColumn, searchColumnType)
             .ApplyIncludesSafely(includes)
             .OrderBy(sortColumn, sortDirection);
+
+        return await PaginatedList<TProjection>.CreateAsync(query.ProjectToType<TProjection>(), pageNumber, pageSize, cancellationToken);
+    }
+
+    public async Task<IPaginatedList<TProjection>> FindPaginatedListAsync<TProjection>(
+        Expression<Func<TEntity, bool>> predicate,
+        int pageNumber, int pageSize, CancellationToken cancellationToken = default) where TProjection : class
+    {
+        var query = _dbSet.AsNoTracking().Where(predicate).AsQueryable();
+
+        return await PaginatedList<TProjection>.CreateAsync(query.ProjectToType<TProjection>(), pageNumber, pageSize, cancellationToken);
+    }
+
+    public async Task<IPaginatedList<TProjection>> FindPaginatedListAsync<TProjection>(
+        Expression<Func<TEntity, bool>> predicate,
+        int pageNumber, int pageSize, string[] includes, CancellationToken cancellationToken = default) where TProjection : class
+    {
+        var query = _dbSet.AsNoTracking().Where(predicate).AsQueryable();
+
+        query = query.ApplyIncludesSafely(includes);
 
         return await PaginatedList<TProjection>.CreateAsync(query.ProjectToType<TProjection>(), pageNumber, pageSize, cancellationToken);
     }

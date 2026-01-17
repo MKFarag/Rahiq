@@ -4,5 +4,5 @@ public record OrderProductResponse(
     int Id,
     string Name,
     decimal UnitPrice,
-    string ImageUrl
+    string? ImageUrl
 );

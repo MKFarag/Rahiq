@@ -24,5 +24,6 @@ public record BundleErrors
         new("Bundle.DuplicatedProducts", "Another bundle already contains the same products", StatusCodes.Conflict);
 
     public static readonly Error InvalidQuantity =
-        new("Bundle.InvalidQuantity", "Invalid quantity", StatusCodes.Conflict);
+        new("Bundle.InvalidQuantity", "Storage quantity cannot be decreased below available stock", StatusCodes.BadRequest);
+
 }

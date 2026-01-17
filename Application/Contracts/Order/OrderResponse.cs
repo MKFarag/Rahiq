@@ -4,7 +4,7 @@ public record OrderResponse(
     int Id,
     DateOnly OrderDate,
     IEnumerable<OrderItemResponse> OrderItems,
-    decimal TotalAmount,
+    decimal Total,
     OrderStatus Status,
     OrderShippingResponse? Shipping,
     decimal? GrandTotal

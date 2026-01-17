@@ -6,6 +6,8 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<BundleItem> BundleItems { get; }
     IGenericRepository<Cart> Carts { get; }
     IGenericRepository<Category> Categories { get; }
+    IGenericRepositoryWithPagination<Order> Orders { get; }
+    IGenericRepository<OrderItem> OrderItems { get; }
     IGenericRepositoryWithPagination<Product> Products { get; }
     IRoleRepository Roles { get; }
     IGenericRepository<Shipping> Shipping { get; }

@@ -14,6 +14,8 @@ public class GetMyCartQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
         if (!carts.Any())
             return new CartResponse([], [], 0);
 
+        carts = carts.OrderByDescending(x => x.AddedAt);
+
         var products = carts
             .Where(x => x.IsProduct && x.Product is not null)
             .Select(x => new CartProductResponse(
@@ -26,7 +28,8 @@ public class GetMyCartQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
 
         var bundles = carts
             .Where(x => x.IsBundle && x.Bundle is not null)
-            .Select(x => new CartBundleResponse(
+            .Select(x => new CartBundleResponse
+            (
                 x.BundleId!.Value,
                 x.Bundle!.Name,
                 x.UnitPrice,
