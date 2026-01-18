@@ -12,7 +12,7 @@ public class CancelOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
         if (order.CustomerId != request.UserId)
             return Result.Failure(OrderErrors.InvalidPermission);
 
-        if (!order.CanBeCancelled())
+        if (!order.CanBeCancelled)
             return Result.Failure(OrderErrors.CannotBeCancelled);
 
         order.Cancel();

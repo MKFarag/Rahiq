@@ -1,17 +1,28 @@
-﻿namespace Domain.Entities;
+﻿using System.Security.Principal;
+
+namespace Domain.Entities;
 
 public sealed class Order
 {
     public int Id { get; set; }
     public string CustomerId { get; set; } = string.Empty;
     public int? ShippingId { get; set; }
+    public int? PaymentId { get; set; }
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public OrderStatus Status { get; set; }
     public decimal Total { get; set; }
 
-    public decimal? GrandTotal => Shipping is not null ? Total + Shipping.Cost : null;
-    public bool CanBeCancelled() => Status is OrderStatus.Pending or OrderStatus.Processing;
+    public decimal? GrandTotal => (Shipping, Payment) switch
+    {
+        (not null, not null) => Total + Shipping!.Cost - Payment!.Amount,
+        (not null, null) => Total + Shipping!.Cost,
+        (null, not null) => Total - Payment!.Amount,
+        _ => null
+    };
 
+    public bool CanBeCancelled => Status is OrderStatus.Pending or OrderStatus.Processing;
+
+    public Payment? Payment { get; set; }
     public Shipping? Shipping { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; } = [];
 
