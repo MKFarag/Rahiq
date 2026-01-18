@@ -1,9 +1,13 @@
-﻿using Application.Contracts.Types;
-using Application.Feathers.Products.GetProduct;
+﻿#region Usings
+
+using Application.Contracts.Types;
 using Application.Feathers.Types.AddType;
 using Application.Feathers.Types.DeleteType;
 using Application.Feathers.Types.GetAllTypes;
+using Application.Feathers.Types.GetType;
 using Application.Feathers.Types.UpdateType;
+
+#endregion
 
 namespace Presentation.Controllers;
 
@@ -20,7 +24,7 @@ public class TypesController(ISender sender) : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetProductQuery(id), cancellationToken);
+        var result = await _sender.Send(new GetTypeQuery(id), cancellationToken);
 
         return result.IsSuccess
             ? Ok(result.Value)
