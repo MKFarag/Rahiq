@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Orders.GetAllOrdersByYear;
+namespace Application.Feathers.Orders.GetAllOrdersByYear;
 
 public class GetAllOrdersByYearQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllOrdersByYearQuery, IPaginatedList<OrderResponse>>
 {
@@ -15,7 +15,7 @@ public class GetAllOrdersByYearQueryHandler(IUnitOfWork unitOfWork) : IRequestHa
                 x => x.Date.Year == request.Year,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
-                [nameof(Order.Shipping), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
+                [nameof(Order.Shipping), nameof(Order.Payment), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
                 cancellationToken
             );
 

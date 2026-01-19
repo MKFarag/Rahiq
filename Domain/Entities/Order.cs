@@ -1,6 +1,4 @@
-﻿using System.Security.Principal;
-
-namespace Domain.Entities;
+﻿namespace Domain.Entities;
 
 public sealed class Order
 {
@@ -12,14 +10,8 @@ public sealed class Order
     public OrderStatus Status { get; set; }
     public decimal Total { get; set; }
 
-    public decimal? GrandTotal => (Shipping, Payment) switch
-    {
-        (not null, not null) => Total + Shipping!.Cost - Payment!.Amount,
-        (not null, null) => Total + Shipping!.Cost,
-        (null, not null) => Total - Payment!.Amount,
-        _ => null
-    };
-
+    public decimal GrandTotal => Total + (Shipping?.Cost ?? 0);
+    public decimal Remaining => GrandTotal - (Payment?.Amount ?? 0);
     public bool CanBeCancelled => Status is OrderStatus.Pending or OrderStatus.Processing;
 
     public Payment? Payment { get; set; }

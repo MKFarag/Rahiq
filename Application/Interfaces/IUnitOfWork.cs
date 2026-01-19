@@ -1,4 +1,4 @@
-﻿namespace Application.Interfaces;
+namespace Application.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {
@@ -8,6 +8,7 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<Category> Categories { get; }
     IGenericRepositoryWithPagination<Order> Orders { get; }
     IGenericRepository<OrderItem> OrderItems { get; }
+    IGenericRepository<Payment> Payments { get; }
     IGenericRepositoryWithPagination<Product> Products { get; }
     IRoleRepository Roles { get; }
     IGenericRepository<Shipping> Shipping { get; }

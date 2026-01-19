@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Orders.GetOrder;
+namespace Application.Feathers.Orders.GetOrder;
 
 public class GetOrderQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetOrderQuery, Result<OrderResponse>>
 {
@@ -10,7 +10,7 @@ public class GetOrderQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetO
             .FindAsync
             (
                 o => o.Id == request.Id,
-                [nameof(Order.Shipping), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
+                [nameof(Order.Shipping), nameof(Order.Payment), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
                 cancellationToken
             );
 

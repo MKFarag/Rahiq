@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Orders.GetAllOrdersByMonth;
+namespace Application.Feathers.Orders.GetAllOrdersByMonth;
 
 public class GetAllOrdersByMonthQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllOrdersByMonthQuery, IPaginatedList<OrderResponse>>
 {
@@ -15,7 +15,7 @@ public class GetAllOrdersByMonthQueryHandler(IUnitOfWork unitOfWork) : IRequestH
                 x => x.Date.Month == request.Month,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
-                [nameof(Order.Shipping), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
+                [nameof(Order.Shipping), nameof(Order.Payment), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
                 cancellationToken
             );
 

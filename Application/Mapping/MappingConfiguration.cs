@@ -1,4 +1,4 @@
-﻿namespace Application.Mapping;
+namespace Application.Mapping;
 
 public class MappingConfiguration : IRegister
 {
@@ -19,5 +19,8 @@ public class MappingConfiguration : IRegister
 
         config.NewConfig<Product, OrderProductResponse>()
             .Map(dest => dest.UnitPrice, src => src.SellingPrice);
+
+        config.NewConfig<Order, OrderResponse>()
+            .Map(dest => dest.OrderDate, src => DateOnly.FromDateTime(src.Date));
     }
 }

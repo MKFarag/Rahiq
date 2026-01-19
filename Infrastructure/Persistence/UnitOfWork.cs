@@ -1,4 +1,4 @@
-﻿using Infrastructure.Persistence.Repositories;
+using Infrastructure.Persistence.Repositories;
 
 namespace Infrastructure.Persistence;
 
@@ -13,6 +13,7 @@ public sealed class UnitOfWork : IUnitOfWork
     public IGenericRepository<Category> Categories { get; private set; }
     public IGenericRepositoryWithPagination<Order> Orders { get; private set; }
     public IGenericRepository<OrderItem> OrderItems { get; private set; }
+    public IGenericRepository<Payment> Payments { get; private set; }
     public IGenericRepositoryWithPagination<Product> Products { get; private set; }
     public IRoleRepository Roles { get; private set; }
     public IGenericRepository<Shipping> Shipping { get; private set; }
@@ -32,6 +33,7 @@ public sealed class UnitOfWork : IUnitOfWork
         Categories = new GenericRepository<Category>(_context);
         Orders = new GenericRepositoryWithPagination<Order>(_context);
         OrderItems = new GenericRepository<OrderItem>(_context);
+        Payments = new GenericRepository<Payment>(_context);
         Products = new GenericRepositoryWithPagination<Product>(_context);
         Roles = new RoleRepository(_context, roleManager);
         Shipping = new GenericRepository<Shipping>(_context);

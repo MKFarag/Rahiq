@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Orders.GetAllMyOrders;
+namespace Application.Feathers.Orders.GetAllMyOrders;
 
 public class GetAllMyOrdersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllMyOrdersQuery, IPaginatedList<OrderResponse>>
 {
@@ -15,7 +15,7 @@ public class GetAllMyOrdersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
                 x => x.CustomerId == request.UserId && x.Date.Year == request.Year,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
-                [nameof(Order.Shipping), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
+                [nameof(Order.Shipping), nameof(Order.Payment), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
                 cancellationToken
             );
 

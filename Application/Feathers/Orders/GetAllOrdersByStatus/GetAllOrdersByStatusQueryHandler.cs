@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Orders.GetAllOrdersByStatus;
+namespace Application.Feathers.Orders.GetAllOrdersByStatus;
 
 public class GetAllOrdersByStatusQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllOrdersByStatusQuery, IPaginatedList<OrderResponse>>
 {
@@ -15,7 +15,7 @@ public class GetAllOrdersByStatusQueryHandler(IUnitOfWork unitOfWork) : IRequest
                 x => x.Status == status,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
-                [nameof(Order.Shipping), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
+                [nameof(Order.Shipping), nameof(Order.Payment), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
                 cancellationToken
             );
 
