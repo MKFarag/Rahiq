@@ -22,5 +22,9 @@ public class MappingConfiguration : IRegister
 
         config.NewConfig<Order, OrderResponse>()
             .Map(dest => dest.OrderDate, src => DateOnly.FromDateTime(src.Date));
+
+        config.NewConfig<(User user, IList<string> roles), UserResponse>()
+            .Map(dest => dest, src => src.user)
+            .Map(dest => dest.Roles, src => src.roles);
     }
 }
