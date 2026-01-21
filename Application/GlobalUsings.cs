@@ -20,3 +20,4 @@ global using System.Linq.Expressions;
 global using Application.Contracts.Order;
 global using Application.Contracts.Shippings;
 global using Application.Contracts.Users;
+global using Application.Contracts.Roles;
