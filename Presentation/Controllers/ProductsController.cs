@@ -17,15 +17,19 @@ namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.Concurrency)]
 public class ProductsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpGet("")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll([FromQuery] RequestFilters filters, [FromQuery] bool includeNotAvailable, CancellationToken cancellationToken)
         => Ok(await _sender.Send(new GetAllProductsQuery(filters, includeNotAvailable), cancellationToken));
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetProductQuery(id), cancellationToken);

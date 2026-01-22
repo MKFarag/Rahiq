@@ -13,15 +13,19 @@ namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.)]
 public class TypesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpGet("")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         => Ok(await _sender.Send(new GetAllTypesQuery(), cancellationToken));
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetTypeQuery(id), cancellationToken);

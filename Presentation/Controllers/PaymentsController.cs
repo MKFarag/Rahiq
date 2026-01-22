@@ -11,6 +11,7 @@ namespace Presentation.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.Concurrency)]
 public class PaymentsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

@@ -10,3 +10,4 @@ global using Microsoft.AspNetCore.Mvc;
 global using Presentation;
 global using Presentation.DTOs.Common;
 global using Presentation.DTOs.Files;
+global using Microsoft.AspNetCore.RateLimiting;

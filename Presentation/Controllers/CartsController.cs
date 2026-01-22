@@ -1,14 +1,19 @@
-﻿using Application.Contracts.Carts;
+﻿#region Usings
+
+using Application.Contracts.Carts;
 using Application.Feathers.Carts.AddToCart;
 using Application.Feathers.Carts.ClearMyCart;
 using Application.Feathers.Carts.GetMyCart;
 using Application.Feathers.Carts.UpdateCartProduct;
+
+#endregion
 
 namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.UserLimit)]
 public class CartsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

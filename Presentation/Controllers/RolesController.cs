@@ -15,6 +15,7 @@ namespace Presentation.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.)]
 public class RolesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

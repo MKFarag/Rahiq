@@ -14,7 +14,8 @@ namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = DefaultRoles.Admin.Name)]
+[Authorize]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.)]
 public class ShippingsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

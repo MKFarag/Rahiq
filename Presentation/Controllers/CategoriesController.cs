@@ -1,23 +1,31 @@
-﻿using Application.Contracts.Categories;
+﻿#region Usings
+
+using Application.Contracts.Categories;
 using Application.Feathers.Category.AddCategory;
 using Application.Feathers.Category.DeleteCategory;
 using Application.Feathers.Category.GetAllCategories;
 using Application.Feathers.Category.GetCategory;
 using Application.Feathers.Category.UpdateCategory;
 
+#endregion
+
 namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.Concurrency)]
 public class CategoriesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpGet("")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         => Ok(await _sender.Send(new GetAllCategoriesQuery(), cancellationToken));
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetCategoryQuery(id), cancellationToken);
