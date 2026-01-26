@@ -17,6 +17,7 @@ public class PaymentsController(ISender sender) : ControllerBase
     private readonly ISender _sender = sender;
 
     [HttpPost("{orderId}")]
+    [Authorize(Roles = DefaultRoles.Customer.Name)]
     public async Task<IActionResult> Add(
         [FromRoute] int orderId,
         [FromForm] AddPaymentRequest request,
@@ -38,7 +39,7 @@ public class PaymentsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{paymentId}/verify")]
-    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HasPermission(Permissions.PaymentVerify)]
     public async Task<IActionResult> Verify([FromRoute] int paymentId, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new VerifyPaymentCommand(paymentId), cancellationToken);

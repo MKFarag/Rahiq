@@ -36,6 +36,7 @@ public class CategoriesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("")]
+    [HasPermission(Permissions.AddCategory)]
     public async Task<IActionResult> Add([FromBody] CategoryRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new AddCategoryCommand(request), cancellationToken);
@@ -46,6 +47,7 @@ public class CategoriesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [HasPermission(Permissions.UpdateCategory)]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CategoryRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new UpdateCategoryCommand(id, request), cancellationToken);
@@ -56,7 +58,8 @@ public class CategoriesController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id, CancellationToken cancellationToken)
+    [HasPermission(Permissions.DeleteCategory)]
+    public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new DeleteCategoryCommand(id), cancellationToken);
 

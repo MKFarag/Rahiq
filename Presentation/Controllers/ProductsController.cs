@@ -40,6 +40,7 @@ public class ProductsController(ISender sender) : ControllerBase
     }
 
     [HttpPost("")]
+    [HasPermission(Permissions.AddProduct)]
     public async Task<IActionResult> Add([FromForm] ProductWithImageRequest request, [FromServices] IValidator<ProductWithImageRequest> validator, CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -57,6 +58,7 @@ public class ProductsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [HasPermission(Permissions.UpdateProduct)]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new UpdateProductCommand(id, request), cancellationToken);
@@ -66,7 +68,8 @@ public class ProductsController(ISender sender) : ControllerBase
             : result.ToProblem();
     }
 
-    [HttpPut("change-status/{id}")]
+    [HttpPut("{id}/change-status")]
+    [HasPermission(Permissions.ChangeProductStatus)]
     public async Task<IActionResult> ChangeStatus([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new ChangeProductStatusCommand(id), cancellationToken);
@@ -76,7 +79,8 @@ public class ProductsController(ISender sender) : ControllerBase
             : result.ToProblem();
     }
 
-    [HttpPut("discount/{id}")]
+    [HttpPut("{id}/discount")]
+    [HasPermission(Permissions.DiscountProduct)]
     public async Task<IActionResult> Discount([FromRoute] int id, [FromBody] ProductDiscountRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new AddProductDiscountCommand(id, request.DiscountPercentage), cancellationToken);
@@ -86,7 +90,8 @@ public class ProductsController(ISender sender) : ControllerBase
             : result.ToProblem();
     }
 
-    [HttpPut("image/{id}")]
+    [HttpPut("{id}/image")]
+    [HasPermission(Permissions.UpdateProduct)]
     public async Task<IActionResult> AddImage([FromRoute] int id, [FromForm] UploadImageRequest request, [FromServices] IValidator<UploadImageRequest> validator, CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -103,7 +108,8 @@ public class ProductsController(ISender sender) : ControllerBase
             : result.ToProblem();
     }
 
-    [HttpDelete("image/{id}")]
+    [HttpDelete("{id}/image")]
+    [HasPermission(Permissions.UpdateProduct)]
     public async Task<IActionResult> DeleteImage([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new DeleteProductImageCommand(id), cancellationToken);

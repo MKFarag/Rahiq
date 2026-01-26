@@ -11,3 +11,4 @@ global using Presentation;
 global using Presentation.DTOs.Common;
 global using Presentation.DTOs.Files;
 global using Microsoft.AspNetCore.RateLimiting;
+global using Infrastructure.Authentication.Filters;

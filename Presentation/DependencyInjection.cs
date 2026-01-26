@@ -172,8 +172,8 @@ public static class DependencyInjection
 
             #region Permission based authentication
 
-            //services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
-            //services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+            services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
             #endregion
 

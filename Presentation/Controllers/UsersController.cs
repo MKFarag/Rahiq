@@ -18,7 +18,7 @@ namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = DefaultRoles.Admin.Name)]
 [EnableRateLimiting(RateLimitingOptions.PolicyNames.Concurrency)]
 public class UsersController(ISender sender) : ControllerBase
 {
