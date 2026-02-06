@@ -27,6 +27,9 @@ public interface IUserRepository
     /// <summary>Checks if a user's email address has been confirmed.</summary>
     Task<bool> IsEmailConfirmedAsync(User user);
 
+    /// <summary>Checks if a user with the specified ID exists in the system.</summary>
+    Task<bool> ExistsAsync(string id, CancellationToken cancellationToken = default);
+
     /// <summary>Checks if an email address is already registered in the system.</summary>
     Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default);
 

@@ -21,7 +21,7 @@ public class GetBundleQueryHandler(IUnitOfWork unitOfWork, ICacheService cache) 
                     ],
                     token
                 ),
-                TimeSpan.FromMinutes(30),
+                Cache.Expirations.Long,
                 [Cache.Tags.Bundle],
                 cancellationToken
             );

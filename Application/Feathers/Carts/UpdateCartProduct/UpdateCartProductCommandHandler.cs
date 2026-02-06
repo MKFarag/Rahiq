@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Carts.UpdateCartProduct;
 
-public class UpdateCartProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateCartProductCommand, Result>
+public class UpdateCartProductCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<UpdateCartProductCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(UpdateCartProductCommand request, CancellationToken cancellationToken = default)
     {
@@ -44,6 +45,8 @@ public class UpdateCartProductCommandHandler(IUnitOfWork unitOfWork) : IRequestH
             else
                 return Result.Failure(CartErrors.InvalidQuantity);
         }
+
+        await _cache.RemoveAsync(Cache.Keys.Cart(request.UserId), cancellationToken);
 
         return Result.Success();
     }

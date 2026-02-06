@@ -83,6 +83,9 @@ public class UserRepository(ApplicationDbContext context, UserManager<Applicatio
         return await _userManager.IsEmailConfirmedAsync(applicationUser);
     }
 
+    public async Task<bool> ExistsAsync(string id, CancellationToken cancellationToken = default)
+        => await _context.Users.AsNoTracking().AnyAsync(cancellationToken);
+
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
     {
         email = _userManager.NormalizeEmail(email);

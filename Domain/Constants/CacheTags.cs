@@ -5,12 +5,14 @@ public static class Cache
     public partial class Tags
     {
         public const string Bundle = "bundles";
+        public const string Cart = "cart";
     }
 
     public partial class Keys
     {
         public static string Bundles(bool includeNotAvailable) => includeNotAvailable ? $"bundle:all" : "bundle:available";
         public static string Bundle(int id) => $"bundle:{id}";
+        public static string Cart(string userId) => $"cart:{userId}";
     }
 
     public static class Expirations

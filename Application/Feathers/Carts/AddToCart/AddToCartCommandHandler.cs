@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Carts.AddToCart;
 
-public class AddToCartCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<AddToCartCommand, Result>
+public class AddToCartCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<AddToCartCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(AddToCartCommand request, CancellationToken cancellationToken = default)
     {
@@ -58,6 +59,8 @@ public class AddToCartCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<A
         }
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveAsync(Cache.Keys.Cart(request.UserId), cancellationToken);
 
         return Result.Success();
     }
