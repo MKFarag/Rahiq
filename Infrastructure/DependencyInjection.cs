@@ -26,6 +26,18 @@ public static class DependencyInjection
 
             services.AddCQRSConfig(typeof(Application.DependencyInjection).Assembly);
 
+
+            services.AddHybridCache(options =>
+            {
+            options.MaximumPayloadBytes = 10 * 1024 * 1024;
+            options.MaximumKeyLength = 2048;
+            options.DefaultEntryOptions = new()
+            {
+                Expiration = TimeSpan.FromHours(1),
+                LocalCacheExpiration = TimeSpan.FromMinutes(30)
+            };
+            });
+
             return services;
         }
 

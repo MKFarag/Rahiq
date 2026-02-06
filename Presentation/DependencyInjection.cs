@@ -39,6 +39,7 @@ public static class DependencyInjection
             services.AddAuthConfig(configuration);
             services.AddRateLimiterConfig(configuration);
 
+            services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IFileStorageService, FileStorageService>();
             services.AddScoped<ISignInService, SignInService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
