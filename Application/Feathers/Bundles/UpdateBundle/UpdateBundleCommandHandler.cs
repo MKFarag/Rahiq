@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Bundles.UpdateBundle;
 
-public class UpdateBundleCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateBundleCommand, Result>
+public class UpdateBundleCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<UpdateBundleCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(UpdateBundleCommand command, CancellationToken cancellationToken = default)
     {
@@ -43,6 +44,8 @@ public class UpdateBundleCommandHandler(IUnitOfWork unitOfWork) : IRequestHandle
         }
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Bundle, cancellationToken);
 
         return Result.Success(cancellationToken);
     }

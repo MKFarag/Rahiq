@@ -1,9 +1,10 @@
 ﻿namespace Application.Feathers.Bundles.AddBundle;
 
-public class AddBundleCommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService) : IRequestHandler<AddBundleCommand, Result<BundleDetailResponse>>
+public class AddBundleCommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService, ICacheService cache) : IRequestHandler<AddBundleCommand, Result<BundleDetailResponse>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IFileStorageService _fileStorageService = fileStorageService;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result<BundleDetailResponse>> Handle(AddBundleCommand command, CancellationToken cancellationToken = default)
     {
@@ -44,6 +45,9 @@ public class AddBundleCommandHandler(IUnitOfWork unitOfWork, IFileStorageService
 
             await _unitOfWork.CompleteAsync(cancellationToken);
         }
+
+        await _cache.RemoveAsync(Cache.Keys.Bundles(true), cancellationToken);
+        await _cache.RemoveAsync(Cache.Keys.Bundles(false), cancellationToken);
 
         return Result.Success(bundle.Adapt<BundleDetailResponse>());
     }

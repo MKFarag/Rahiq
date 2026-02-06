@@ -1,9 +1,10 @@
 ﻿namespace Application.Feathers.Bundles.AddBundleImage;
 
-public class AddBundleImageCommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService) : IRequestHandler<AddBundleImageCommand, Result>
+public class AddBundleImageCommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService, ICacheService cache) : IRequestHandler<AddBundleImageCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IFileStorageService _fileStorageService = fileStorageService;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(AddBundleImageCommand request, CancellationToken cancellationToken = default)
     {
@@ -22,6 +23,8 @@ public class AddBundleImageCommandHandler(IUnitOfWork unitOfWork, IFileStorageSe
         bundle.ImageUrl = relativePath;
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Bundle, cancellationToken);
 
         return Result.Success();
     }

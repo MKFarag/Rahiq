@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Bundles.DeactivateBundle;
 
-public class DeactivateBundleCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeactivateBundleCommand, Result>
+public class DeactivateBundleCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<DeactivateBundleCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(DeactivateBundleCommand request, CancellationToken cancellationToken = default)
     {
@@ -12,6 +13,8 @@ public class DeactivateBundleCommandHandler(IUnitOfWork unitOfWork) : IRequestHa
         bundle.EndAt = DateOnly.FromDateTime(DateTime.Today);
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Bundle, cancellationToken);
 
         return Result.Success();
     }
