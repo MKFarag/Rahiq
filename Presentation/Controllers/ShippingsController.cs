@@ -14,16 +14,19 @@ namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = DefaultRoles.Admin.Name)]
+[Authorize]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.Concurrency)]
 public class ShippingsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpGet("")]
+    [HasPermission(Permissions.ReadShipping)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         => Ok(await _sender.Send(new GetAllShippingsQuery(), cancellationToken));
 
     [HttpGet("{id}")]
+    [HasPermission(Permissions.ReadShipping)]
     public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetShippingQuery(id), cancellationToken);
@@ -34,6 +37,7 @@ public class ShippingsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [HasPermission(Permissions.UpdateShipping)]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ShippingRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new UpdateShippingCommand(id, request), cancellationToken);
@@ -44,6 +48,7 @@ public class ShippingsController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [HasPermission(Permissions.DeleteShipping)]
     public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new DeleteShippingCommand(id), cancellationToken);
@@ -54,6 +59,7 @@ public class ShippingsController(ISender sender) : ControllerBase
     }
 
     [HttpPost("")]
+    [Authorize(Roles = DefaultRoles.Customer.Name)]
     public async Task<IActionResult> AddCustomerShipping([FromBody] CustomerShippingRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new AddCustomerShippingCommand(request), cancellationToken);
@@ -64,6 +70,7 @@ public class ShippingsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id}/assign-details")]
+    [HasPermission(Permissions.AssignShippingDetails)]
     public async Task<IActionResult> AssignDetails([FromRoute] int id, [FromBody] AdminShippingRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new AssignShippingDetailsCommand(id, request), cancellationToken);

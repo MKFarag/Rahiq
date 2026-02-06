@@ -17,15 +17,19 @@ namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.Concurrency)]
 public class BundlesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpGet("")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll([FromQuery] bool includeNotAvailable, CancellationToken cancellationToken)
         => Ok(await _sender.Send(new GetAllBundlesQuery(includeNotAvailable), cancellationToken));
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetBundleQuery(id), cancellationToken);
@@ -36,6 +40,7 @@ public class BundlesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("")]
+    [HasPermission(Permissions.AddBundle)]
     public async Task<IActionResult> Add([FromForm] BundleWithImageRequest request, [FromServices] IValidator<BundleWithImageRequest> validator, CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -53,6 +58,7 @@ public class BundlesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [HasPermission(Permissions.UpdateBundle)]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] BundleRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new UpdateBundleCommand(id, request), cancellationToken);
@@ -62,7 +68,8 @@ public class BundlesController(ISender sender) : ControllerBase
             : result.ToProblem();
     }
 
-    [HttpPut("image/{id}")]
+    [HttpPut("{id}/image")]
+    [HasPermission(Permissions.UpdateBundle)]
     public async Task<IActionResult> AddImage([FromRoute] int id, [FromForm] UploadImageRequest request, [FromServices] IValidator<UploadImageRequest> validator, CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -79,7 +86,8 @@ public class BundlesController(ISender sender) : ControllerBase
             : result.ToProblem();
     }
 
-    [HttpDelete("image/{id}")]
+    [HttpDelete("{id}/image")]
+    [HasPermission(Permissions.UpdateBundle)]
     public async Task<IActionResult> DeleteImage([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new DeleteBundleImageCommand(id), cancellationToken);
@@ -90,6 +98,7 @@ public class BundlesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id}/deactivate")]
+    [HasPermission(Permissions.BundleActivation)]
     public async Task<IActionResult> Deactivate([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new DeactivateBundleCommand(id), cancellationToken);
@@ -100,6 +109,7 @@ public class BundlesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id}/reactivate")]
+    [HasPermission(Permissions.BundleActivation)]
     public async Task<IActionResult> Reactivate([FromRoute] int id, [FromBody] ReactivateBundleRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new ReactivateBundleCommand(id, request.EndAt, request.QuantityAvailable), cancellationToken);

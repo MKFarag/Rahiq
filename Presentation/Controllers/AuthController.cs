@@ -16,6 +16,7 @@ namespace Presentation.Controllers;
 
 [Route("[controller]")]
 [ApiController]
+[EnableRateLimiting(RateLimitingOptions.PolicyNames.IpLimit)]
 public class AuthController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

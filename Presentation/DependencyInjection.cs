@@ -10,11 +10,15 @@ using Infrastructure.Persistence.Identities;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Presentation.Abstraction;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
 using System.Text;
+using System.Threading.RateLimiting;
+using StatusCodes = Microsoft.AspNetCore.Http.StatusCodes;
 
 #endregion
 
@@ -33,6 +37,7 @@ public static class DependencyInjection
             services.AddFluentValidationConfig();
             services.AddMailConfig(configuration);
             services.AddAuthConfig(configuration);
+            services.AddRateLimiterConfig(configuration);
 
             services.AddScoped<IFileStorageService, FileStorageService>();
             services.AddScoped<ISignInService, SignInService>();
@@ -63,6 +68,66 @@ public static class DependencyInjection
                 });
 
             return services;
+        }
+
+        private IServiceCollection AddRateLimiterConfig(IConfiguration configuration)
+        {
+            services.AddOptions<RateLimitingOptions>()
+                .BindConfiguration(nameof(RateLimitingOptions))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            var provider = services.BuildServiceProvider();
+            var settings = provider.GetRequiredService<IOptions<RateLimitingOptions>>().Value;
+
+            services.AddRateLimiter(rateLimiterOptions =>
+            {
+                rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+                #region IpLimit
+
+                rateLimiterOptions.AddPolicy(RateLimitingOptions.PolicyNames.IpLimit, httpContext =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString(),
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = settings.IpPolicy.PermitLimit,
+                            Window = TimeSpan.FromSeconds(settings.IpPolicy.WindowInSeconds)
+                        }
+                    )
+                );
+
+                #endregion
+
+                #region UserLimit
+
+                rateLimiterOptions.AddPolicy(RateLimitingOptions.PolicyNames.UserLimit, httpContext =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        partitionKey: httpContext.User.GetId(),
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = settings.UserPolicy.PermitLimit,
+                            Window = TimeSpan.FromSeconds(settings.UserPolicy.WindowInSeconds)
+                        }
+                    )
+                );
+
+                #endregion
+
+                #region Concurrency
+
+                rateLimiterOptions.AddConcurrencyLimiter(RateLimitingOptions.PolicyNames.Concurrency, options =>
+                {
+                    options.QueueLimit = settings.Concurrency.QueueLimit;
+                    options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+
+                    options.PermitLimit = settings.Concurrency.PermitLimit;
+                });
+
+                #endregion
+            });
+
+                return services;
         }
 
         private IServiceCollection AddAuthConfig(IConfiguration configuration)
@@ -107,8 +172,8 @@ public static class DependencyInjection
 
             #region Permission based authentication
 
-            //services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
-            //services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+            services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
             #endregion
 
