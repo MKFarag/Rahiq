@@ -1,14 +1,27 @@
 ﻿namespace Application.Feathers.Types.GetType;
 
-public class GetTypeQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetTypeQuery, Result<TypeResponse>>
+public class GetTypeQueryHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<GetTypeQuery, Result<TypeResponse>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result<TypeResponse>> Handle(GetTypeQuery request, CancellationToken cancellationToken = default)
     {
-        if (await _unitOfWork.Types.GetAsync([request.Id], cancellationToken) is not { } type)
-            return Result.Failure<TypeResponse>(TypeErrors.NotFound);
+        var type = await _cache
+            .GetOrCreateAsync
+            (
+                Cache.Keys.Type(request.Id),
+                async token => await _unitOfWork.Types.GetAsync([request.Id], token),
+                Cache.Expirations.VeryLong,
+                [Cache.Tags.Type],
+                cancellationToken
+            );
 
-        return Result.Success(type.Adapt<TypeResponse>());
+        if (type is not null)
+            return Result.Success(type.Adapt<TypeResponse>());
+
+        await _cache.RemoveAsync(Cache.Keys.Type(request.Id), cancellationToken);
+
+        return Result.Failure<TypeResponse>(TypeErrors.NotFound);
     }
 }

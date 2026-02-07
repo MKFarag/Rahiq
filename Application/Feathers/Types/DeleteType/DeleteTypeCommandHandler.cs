@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Types.DeleteType;
 
-public class DeleteTypeCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteTypeCommand, Result>
+public class DeleteTypeCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<DeleteTypeCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(DeleteTypeCommand request, CancellationToken cancellationToken = default)
     {
@@ -15,6 +16,8 @@ public class DeleteTypeCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         _unitOfWork.Types.Delete(type);
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Type, cancellationToken);
 
         return Result.Success();
     }

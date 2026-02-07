@@ -7,6 +7,7 @@ public static class Cache
         public const string Bundle = "bundles";
         public const string Cart = "cart";
         public const string Category = "categories";
+        public const string Type = "Types";
     }
 
     public partial class Keys
@@ -18,6 +19,9 @@ public static class Cache
 
         public const string Categories = "category:all";
         public static string Category(int id) => $"category:{id}";
+
+        public const string Types = "types:all";
+        public static string Type(int id) => $"type:{id}";
     }
 
     public static class Expirations

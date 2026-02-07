@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Types.UpdateType;
 
-public class UpdateTypeCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateTypeCommand, Result>
+public class UpdateTypeCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<UpdateTypeCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(UpdateTypeCommand command, CancellationToken cancellationToken = default)
     {
@@ -15,6 +16,8 @@ public class UpdateTypeCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         type.Name = command.Request.Name;
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Type, cancellationToken);
 
         return Result.Success();
     }
