@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Category.UpdateCategory;
 
-public class UpdateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateCategoryCommand, Result>
+public class UpdateCategoryCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<UpdateCategoryCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(UpdateCategoryCommand command, CancellationToken cancellationToken = default)
     {
@@ -15,6 +16,8 @@ public class UpdateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
         category = command.Request.Adapt(category);
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Category, cancellationToken);
 
         return Result.Success();
     }
