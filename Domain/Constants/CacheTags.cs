@@ -8,6 +8,7 @@ public static class Cache
         public const string Cart = "cart";
         public const string Category = "categories";
         public const string Type = "Types";
+        public const string Product = "Products";
     }
 
     public partial class Keys
@@ -22,6 +23,8 @@ public static class Cache
 
         public const string Types = "types:all";
         public static string Type(int id) => $"type:{id}";
+
+        public static string Product(int id) => $"product:{id}";
     }
 
     public static class Expirations

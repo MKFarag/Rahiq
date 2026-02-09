@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Products.ChangeProductStatus;
 
-public class ChangeProductStatusCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<ChangeProductStatusCommand, Result>
+public class ChangeProductStatusCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<ChangeProductStatusCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(ChangeProductStatusCommand request, CancellationToken cancellationToken = default)
     {
@@ -11,6 +12,8 @@ public class ChangeProductStatusCommandHandler(IUnitOfWork unitOfWork) : IReques
 
         product.IsAvailable = !product.IsAvailable;
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Product, cancellationToken);
 
         return Result.Success();
     }

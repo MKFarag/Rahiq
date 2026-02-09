@@ -46,8 +46,7 @@ public class AddBundleCommandHandler(IUnitOfWork unitOfWork, IFileStorageService
             await _unitOfWork.CompleteAsync(cancellationToken);
         }
 
-        await _cache.RemoveAsync(Cache.Keys.Bundles(true), cancellationToken);
-        await _cache.RemoveAsync(Cache.Keys.Bundles(false), cancellationToken);
+        await _cache.RemoveAsync([Cache.Keys.Bundles(true), Cache.Keys.Bundles(false)], cancellationToken);
 
         return Result.Success(bundle.Adapt<BundleDetailResponse>());
     }

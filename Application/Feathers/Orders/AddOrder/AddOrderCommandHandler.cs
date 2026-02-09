@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Orders.AddOrder;
 
-public class AddOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<AddOrderCommand, Result<OrderResponse>>
+public class AddOrderCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<AddOrderCommand, Result<OrderResponse>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result<OrderResponse>> Handle(AddOrderCommand request, CancellationToken cancellationToken = default)
     {
@@ -52,6 +53,9 @@ public class AddOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<Ad
         _unitOfWork.Carts.DeleteRange(cart);
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveAsync(Cache.Keys.Cart(request.UserId), cancellationToken);
+        await _cache.RemoveByTagAsync([Cache.Tags.Bundle, Cache.Tags.Product], cancellationToken);
 
         return Result.Success(order.Adapt<OrderResponse>());
     }

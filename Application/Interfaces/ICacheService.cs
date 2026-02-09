@@ -11,6 +11,12 @@ public interface ICacheService
     /// <summary>Removes a specific key from the cache</summary>
     Task RemoveAsync(string key, CancellationToken cancellationToken = default);
 
+    /// <summary>Removes a specific key from the caches</summary>
+    Task RemoveAsync(IEnumerable<string> keys, CancellationToken cancellationToken = default);
+
     /// <summary>Removes all cache entries with the specified tag</summary>
     Task RemoveByTagAsync(string tag, CancellationToken cancellationToken = default);
+
+    /// <summary>Removes all cache entries with the specified tags</summary>
+    Task RemoveByTagAsync(IEnumerable<string> tags, CancellationToken cancellationToken = default);
 }

@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Products.AddProductDiscount;
 
-public class AddProductDiscountCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<AddProductDiscountCommand, Result>
+public class AddProductDiscountCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<AddProductDiscountCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(AddProductDiscountCommand request, CancellationToken cancellationToken = default)
     {
@@ -15,6 +16,8 @@ public class AddProductDiscountCommandHandler(IUnitOfWork unitOfWork) : IRequest
         product.DiscountPercentage = request.Value;
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Product, cancellationToken);
 
         return Result.Success();
     }

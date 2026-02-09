@@ -1,9 +1,10 @@
 ﻿namespace Application.Feathers.Products.AddProductImage;
 
-public class AddProductImageCommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService) : IRequestHandler<AddProductImageCommand, Result>
+public class AddProductImageCommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService, ICacheService cache) : IRequestHandler<AddProductImageCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IFileStorageService _fileStorageService = fileStorageService;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(AddProductImageCommand request, CancellationToken cancellationToken = default)
     {
@@ -22,6 +23,8 @@ public class AddProductImageCommandHandler(IUnitOfWork unitOfWork, IFileStorageS
         product.ImageUrl = relativePath;
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Product, cancellationToken);
 
         return Result.Success();
     }

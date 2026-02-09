@@ -1,9 +1,10 @@
 ﻿namespace Application.Feathers.Products.AddProduct;
 
-public class AddProductCommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService) : IRequestHandler<AddProductCommand, Result<ProductResponse>>
+public class AddProductCommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService, ICacheService cache) : IRequestHandler<AddProductCommand, Result<ProductResponse>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IFileStorageService _fileStorageService = fileStorageService;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result<ProductResponse>> Handle(AddProductCommand command, CancellationToken cancellationToken = default)
     {
@@ -28,6 +29,8 @@ public class AddProductCommandHandler(IUnitOfWork unitOfWork, IFileStorageServic
 
             await _unitOfWork.CompleteAsync(cancellationToken);
         }
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Product, cancellationToken);
 
         return Result.Success(product.Adapt<ProductResponse>());
     }

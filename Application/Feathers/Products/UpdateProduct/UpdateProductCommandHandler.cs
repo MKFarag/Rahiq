@@ -1,8 +1,9 @@
 ﻿namespace Application.Feathers.Products.UpdateProduct;
 
-public class UpdateProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateProductCommand, Result>
+public class UpdateProductCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<UpdateProductCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Result> Handle(UpdateProductCommand command, CancellationToken cancellationToken = default)
     {
@@ -18,6 +19,8 @@ public class UpdateProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         product = command.Request.Adapt(product);
 
         await _unitOfWork.CompleteAsync(cancellationToken);
+
+        await _cache.RemoveByTagAsync(Cache.Tags.Product, cancellationToken);
 
         return Result.Success();
     }
