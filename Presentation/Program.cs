@@ -3,6 +3,8 @@
 using Application.Interfaces;
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 #endregion
@@ -85,5 +87,10 @@ app.MapControllers();
 app.UseExceptionHandler();
 
 app.MapStaticAssets();
+
+app.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();

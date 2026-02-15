@@ -5,6 +5,7 @@ using Application.Interfaces;
 using Hangfire;
 using Infrastructure;
 using Infrastructure.Authentication;
+using Infrastructure.Health;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Identities;
 using Infrastructure.Services;
@@ -59,6 +60,11 @@ public static class DependencyInjection
             services
                 .AddExceptionHandler<GlobalExceptionHandler>()
                 .AddProblemDetails();
+
+            services.AddHealthChecks()
+                .AddSqlServer(name: "Database", connectionString: configuration.GetConnectionString("DefaultConnection")!, tags: ["Db"])
+                .AddHangfire(options => { options.MinimumAvailableServers = 1; })
+                .AddCheck<MailProviderHealthCheck>(name: "Mail service");
 
             services
                 .AddEndpointsApiExplorer()
