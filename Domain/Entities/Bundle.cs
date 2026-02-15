@@ -9,7 +9,7 @@ public sealed class Bundle
     public string? ImageUrl { get; set; }
     public DateOnly EndAt { get; set; }
 
-    public bool IsActive => EndAt >= DateOnly.FromDateTime(DateTime.UtcNow) && QuantityAvailable > 0;
+    public bool IsActive => EndAt > DateOnly.FromDateTime(DateTime.UtcNow) && QuantityAvailable > 0;
     public int RemainingDays => Math.Max(0, (EndAt.ToDateTime(TimeOnly.MinValue) - DateTime.UtcNow).Days);
     public decimal OldPrice => BundleItems.Sum(x => x.Product.Price);
     public decimal SellingPrice => OldPrice.ApplyDiscount(DiscountPercentage);

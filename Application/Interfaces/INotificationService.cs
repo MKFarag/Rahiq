@@ -5,4 +5,9 @@ public interface INotificationService
     Task SendConfirmationLinkAsync(User user, string code, int expiryTimeInHours = 24);
     Task SendResetPasswordAsync(User user, string code, int expiryTimeInHours = 24);
     Task SendChangeEmailNotificationAsync(User user, string oldEmail, DateTime changeDate);
+
+    // Daily Report Methods
+    Task SendQuantityWarningAsync();
+    Task SendPendingOrderListAsync();
+    Task SendCanceledOrderListAsync();
 }

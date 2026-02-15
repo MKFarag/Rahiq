@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Canceled Orders Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #cfcfcf 0%, #e0e0e0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .email-container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .message {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .stats-box {
+            background: linear-gradient(135deg, #fce8e6, #f8d7da);
+            border: 1px solid #f5c6cb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .stats-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .stats-value {
+            font-size: 36px;
+            color: #c0392b;
+            font-weight: 700;
+        }
+        
+        .report-date {
+            font-size: 14px;
+            color: #888;
+            margin-top: 8px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .data-table tr:hover td {
+            background-color: #fff5f5;
+        }
+        
+        .info-note {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #721c24;
+            text-align: center;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .company-info {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header, .content, .footer {
+                padding: 25px 20px;
+            }
+            
+            .greeting {
+                font-size: 20px;
+            }
+            
+            .stats-value {
+                font-size: 28px;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>{{TitleName}}</h1>
+            <p>Daily Canceled Orders Report</p>
+        </div>
+        
+        <div class="content">
+            <div class="greeting">Hi {{UserName}},</div>
+            
+            <div class="message">
+                Here is the summary of today's canceled orders for your review and analysis.
+            </div>
+            
+            <div class="stats-box">
+                <div class="stats-label">Canceled Orders Today</div>
+                <div class="stats-value">{{TotalCount}}</div>
+                <div class="report-date">Report Date: {{ReportDate}}</div>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer ID</th>
+                            <th>Order Date</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ItemsTable}}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="info-note">
+                <strong>Notice:</strong> Consider reaching out to customers to understand cancellation reasons and improve service quality.
+            </div>
+            
+            <div class="message">
+                If you need assistance, please contact our support team at {{SupportEmail}}.
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-text">
+                Thanks,<br>
+                <strong>{{TeamName}}</strong>
+            </div>
+            
+            <div class="company-info">
+                {{TitleName}}<br>
+                {{Address}}<br>
+                {{City}}, {{Country}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

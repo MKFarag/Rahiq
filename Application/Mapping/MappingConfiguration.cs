@@ -1,3 +1,5 @@
+using Application.Contracts.Notifications;
+
 namespace Application.Mapping;
 
 public class MappingConfiguration : IRegister
@@ -26,5 +28,19 @@ public class MappingConfiguration : IRegister
         config.NewConfig<(User user, IList<string> roles), UserResponse>()
             .Map(dest => dest, src => src.user)
             .Map(dest => dest.Roles, src => src.roles);
+
+        config.NewConfig<Bundle, BundleQuantityWarning>()
+            .Map(dest => dest.BundleId, src => src.Id)
+            .Map(dest => dest.BundleName, src => src.Name);
+        
+        config.NewConfig<BundleItem, BundleItemQuantityWarning>()
+            .Map(dest => dest.ItemId, src => src.ProductId)
+            .Map(dest => dest.ItemName, src => src.Product.Name);
+
+        config.NewConfig<Order, OrderReportInfo>()
+            .Map(dest => dest.OrderId, src => src.Id)
+            .Map(dest => dest.CustomerId, src => src.CustomerId)
+            .Map(dest => dest.OrderDate, src => src.Date)
+            .Map(dest => dest.Total, src => src.GrandTotal);
     }
 }

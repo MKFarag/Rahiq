@@ -1,5 +1,6 @@
 #region Usings
 
+using Application.Interfaces;
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
 using Serilog;
@@ -34,25 +35,50 @@ app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
+#region Hangfire Dashboard
+
 app.MapHangfireDashboard("/jobs", new DashboardOptions
 {
     Authorization =
-    [
-        new HangfireCustomBasicAuthenticationFilter
+[
+new HangfireCustomBasicAuthenticationFilter
          {
              User = app.Configuration.GetValue<string>("Hangfire:Username"),
              Pass = app.Configuration.GetValue<string>("Hangfire:Password")
          }
-    ],
+],
     DashboardTitle = "Rahiq jobs dashboard",
     IsReadOnlyFunc = context => true
 });
+
+#endregion
+
+#region Hangfire Recurring Jobs Scheduling
+
+RecurringJob.AddOrUpdate<INotificationService>(
+"CanceledOrder",
+x => x.SendCanceledOrderListAsync(),
+Cron.Daily);
+
+RecurringJob.AddOrUpdate<INotificationService>(
+    "PendingOrder",
+    x => x.SendPendingOrderListAsync(),
+    Cron.Daily);
+
+RecurringJob.AddOrUpdate<INotificationService>(
+    "BundleQuantity",
+    x => x.SendQuantityWarningAsync(),
+    Cron.Daily);
+
+#endregion
 
 app.UseCors();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 app.MapControllers();
 

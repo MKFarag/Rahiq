@@ -23,6 +23,11 @@ public class EmailTemplateOptions
         public static readonly string ChangeDate = "{{ChangeDate}}";
         public static readonly string NewEmail = "{{NewEmail}}";
         public static readonly string ExpiryTime = "{{ExpiryTime}}";
+
+        // Daily Report Placeholders
+        public static readonly string ReportDate = "{{ReportDate}}";
+        public static readonly string TotalCount = "{{TotalCount}}";
+        public static readonly string ItemsTable = "{{ItemsTable}}";
     }
 
     public partial class TemplatesNames
@@ -32,5 +37,9 @@ public class EmailTemplateOptions
         public static readonly string ChangeEmailNotification = nameof(ChangeEmailNotification);
         public static readonly string ResetPassword = nameof(ResetPassword);
 
+        // Daily Report Templates
+        public static readonly string BundleQuantityWarning = nameof(BundleQuantityWarning);
+        public static readonly string PendingOrderList = nameof(PendingOrderList);
+        public static readonly string CanceledOrderList = nameof(CanceledOrderList);
     }
 }
