@@ -5,4 +5,7 @@
     <Project Path="Infrastructure/Infrastructure.csproj" />
     <Project Path="Presentation/Presentation.csproj" />
   </Folder>
+  <Folder Name="/test/">
+    <Project Path="Application.Test/Application.Test.csproj" Id="37535973-2649-41a6-85ae-4e007959a07c" />
+  </Folder>
 </Solution>
