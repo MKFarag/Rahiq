@@ -44,7 +44,8 @@ public class UserRepository(ApplicationDbContext context, UserManager<Applicatio
                   .Select(u => new
                   {
                       u.Key.Id,
-                      FullName = $"{u.Key.FirstName}, {u.Key.LastName}",
+                      u.Key.FirstName,
+                      u.Key.LastName,
                       u.Key.Email,
                       u.Key.UserName,
                       u.Key.IsDisabled,

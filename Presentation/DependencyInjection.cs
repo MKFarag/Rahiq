@@ -148,9 +148,27 @@ public static class DependencyInjection
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
-            #region Validations
-
             var settings = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
+
+            #endregion
+
+            #region Add Identity
+
+            services
+                .AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.SignIn.RequireConfirmedEmail = true;
+                options.User.RequireUniqueEmail = true;
+            });
+
+            #endregion
+
+            #region JWT Authentication
 
             services
                 .AddAuthentication(options =>
@@ -175,32 +193,10 @@ public static class DependencyInjection
 
             #endregion
 
-            #endregion
-
             #region Permission based authentication
 
             services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
-
-            #endregion
-
-            #region Add Identity
-
-            services
-                .AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            #region Configurations
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.Password.RequiredLength = 8;
-                options.SignIn.RequireConfirmedEmail = true;
-                options.User.RequireUniqueEmail = true;
-            });
-
-            #endregion
 
             #endregion
 

@@ -10,28 +10,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Test.Bundles;
 
-// =============================================================================
-// This version uses EF Core InMemory Database instead of FakeItEasy for the DB.
-//
-// THE BIG DIFFERENCE:
-//
-//   FakeItEasy approach:
-//      You TELL the fake: "when AnyAsync is called, return true"
-//      The fake doesn't actually query anything — it just returns what you told it.
-//
-//   InMemory approach:
-//      You INSERT real data into an InMemory database.
-//      The handler runs REAL queries against that data.
-//      It feels more like testing against a real database.
-//
-// WHAT STILL NEEDS FAKES:
-//      IFileStorageService — because it saves files to disk (not DB related)
-//      ICacheService       — because it talks to Redis (not DB related)
-//      IUnitOfWork         — because its constructor needs UserManager/RoleManager
-//                            which are complex Identity classes we don't need here.
-//                            We only fake it to wire .Bundles and .Products
-//                            to REAL repositories backed by the InMemory DB.
-// =============================================================================
 public class AddBundleCommandHandlerInMemoryTest : IDisposable
 {
     private readonly ApplicationDbContext _context;
