@@ -1,6 +1,7 @@
 ﻿namespace Application.Contracts.Carts;
 
 public record CartQuantityRequest(
+    int ItemId,
     int Quantity,
     bool IsBundle
 );
@@ -12,10 +13,9 @@ public class CartQuantityRequestValidator : AbstractValidator<CartQuantityReques
     public CartQuantityRequestValidator()
     {
         RuleFor(x => x.Quantity)
-            .NotEmpty()
             .GreaterThan(0);
 
-        RuleFor(x => x.IsBundle)
+        RuleFor(x => x.ItemId)
             .NotEmpty();
     }
 }

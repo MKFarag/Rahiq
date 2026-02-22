@@ -1,8 +1,8 @@
 ﻿global using Application.Abstraction.Messaging;
 global using Application.Contracts.Common;
 global using Domain.Abstraction;
-global using Domain.Constants;
 global using Domain.Settings;
+global using Domain.Constants;
 global using FluentValidation;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Http;
@@ -12,3 +12,4 @@ global using Presentation.DTOs.Common;
 global using Presentation.DTOs.Files;
 global using Microsoft.AspNetCore.RateLimiting;
 global using Infrastructure.Authentication.Filters;
+global using StatusCodes = Microsoft.AspNetCore.Http.StatusCodes;

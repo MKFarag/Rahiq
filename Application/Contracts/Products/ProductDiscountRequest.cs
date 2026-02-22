@@ -11,7 +11,6 @@ public class ProductDiscountRequestValidator : AbstractValidator<ProductDiscount
     public ProductDiscountRequestValidator()
     {
         RuleFor(x => x.DiscountPercentage)
-            .NotEmpty()
             .InclusiveBetween(0, 100);
     }
 }

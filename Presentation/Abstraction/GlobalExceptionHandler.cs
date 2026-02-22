@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using StatusCodes = Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Presentation.Abstraction;
 

@@ -9,5 +9,6 @@ public record ProductResponse(
     string Description,
     decimal StandardPrice,
     decimal SellingPrice,
+    bool IsAvailable,
     string ImageUrl
 );

@@ -6,6 +6,12 @@ public class MappingConfiguration : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
+        config.NewConfig<(Product p, Category c, Domain.Entities.Type t), ProductResponse>()
+            .Map(dest => dest, src => src.p)
+            .Map(dest => dest.Category, src => src.c.Name)
+            .Map(dest => dest.Type, src => src.t.Name)
+            .Map(dest => dest.StandardPrice, src => src.p.Price);
+
         config.NewConfig<Product, ProductResponse>()
             .Map(dest => dest.Category, src => src.Category.Name)
             .Map(dest => dest.Type, src => src.Type.Name)

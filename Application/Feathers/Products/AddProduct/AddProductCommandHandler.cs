@@ -11,6 +11,12 @@ public class AddProductCommandHandler(IUnitOfWork unitOfWork, IFileStorageServic
         if (await _unitOfWork.Products.AnyAsync(x => x.Name == command.Request.Name, cancellationToken))
             return Result.Failure<ProductResponse>(ProductErrors.DuplicatedName);
 
+        if (await _unitOfWork.Categories.GetAsync([command.Request.CategoryId], cancellationToken) is not { } category)
+            return Result.Failure<ProductResponse>(CategoryErrors.NotFound);
+
+        if (await _unitOfWork.Types.GetAsync([command.Request.TypeId], cancellationToken) is not { } type)
+            return Result.Failure<ProductResponse>(TypeErrors.NotFound);
+
         var product = command.Request.Adapt<Product>();
 
         await _unitOfWork.Products.AddAsync(product, cancellationToken);
@@ -32,6 +38,8 @@ public class AddProductCommandHandler(IUnitOfWork unitOfWork, IFileStorageServic
 
         await _cache.RemoveByTagAsync(Cache.Tags.Product, cancellationToken);
 
-        return Result.Success(product.Adapt<ProductResponse>());
+        var response = (product, category, type).Adapt<ProductResponse>();
+
+        return Result.Success(response);
     }
 }

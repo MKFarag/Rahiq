@@ -3,7 +3,7 @@
 public record TypeErrors
 {
     public static readonly Error NotFound =
-        new("Type.NotFound", "Nothing found by this Id", StatusCodes.BadRequest);
+        new("Type.NotFound", "Nothing found by this Id", StatusCodes.NotFound);
 
     public static readonly Error DuplicatedName =
         new("Type.DuplicatedName", "This name is already exist", StatusCodes.Conflict);

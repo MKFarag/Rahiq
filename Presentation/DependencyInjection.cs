@@ -19,7 +19,6 @@ using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
 using System.Text;
 using System.Threading.RateLimiting;
-using StatusCodes = Microsoft.AspNetCore.Http.StatusCodes;
 
 #endregion
 

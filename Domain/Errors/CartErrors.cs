@@ -2,6 +2,9 @@
 
 public record CartErrors
 {
+    public static readonly Error NotFound =
+        new("Cart.NotFound", "Nothing found by this id", StatusCodes.NotFound);
+
     public static readonly Error InvalidQuantity =
         new("Cart.InvalidQuantity", "Invalid quantity", StatusCodes.BadRequest);
 
