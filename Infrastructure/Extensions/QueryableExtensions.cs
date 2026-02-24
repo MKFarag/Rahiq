@@ -1,4 +1,5 @@
-﻿using System.Linq.Dynamic.Core;
+using System.Linq.Dynamic.Core;
+using Domain.Settings;
 
 namespace Infrastructure.Extensions;
 
@@ -12,10 +13,15 @@ internal static class QueryableExtensions
         if (includes is null || includes.Length == 0)
             return query;
 
+        bool forceSplit = includes.Contains(QueryHint.SplitQuery);
+
+        if (forceSplit)
+            includes = [.. includes.Where(x => x != QueryHint.SplitQuery)];
+
         bool hasDeepIncludes = includes.Any(x => x.Count(c => c == '.') >= _maxIncludeDepth);
         bool hasTooManyIncludes = includes.Length >= _maxIncludeCount;
 
-        if (hasDeepIncludes || hasTooManyIncludes)
+        if (forceSplit || hasDeepIncludes || hasTooManyIncludes)
             query = query.AsSplitQuery();
 
         foreach (var include in includes)

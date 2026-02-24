@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities;
+namespace Domain.Entities;
 
 public sealed class Bundle
 {
@@ -10,9 +10,9 @@ public sealed class Bundle
     public DateOnly EndAt { get; set; }
 
     public bool IsActive => EndAt > DateOnly.FromDateTime(DateTime.UtcNow) && QuantityAvailable > 0;
-    public int RemainingDays => Math.Max(0, (EndAt.ToDateTime(TimeOnly.MinValue) - DateTime.UtcNow).Days);
+    public int RemainingDays => Math.Max(0, EndAt.DayNumber - DateOnly.FromDateTime(DateTime.UtcNow).DayNumber);
     public decimal OldPrice => BundleItems.Sum(x => x.Product.Price);
     public decimal SellingPrice => OldPrice.ApplyDiscount(DiscountPercentage);
 
-    public ICollection<BundleItem> BundleItems { get; set; } = default!;
+    public ICollection<BundleItem> BundleItems { get; set; } = [];
 }

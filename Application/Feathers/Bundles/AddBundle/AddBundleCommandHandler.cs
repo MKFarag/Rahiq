@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Bundles.AddBundle;
+namespace Application.Feathers.Bundles.AddBundle;
 
 public class AddBundleCommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService, ICacheService cache) : IRequestHandler<AddBundleCommand, Result<BundleDetailResponse>>
 {
@@ -18,10 +18,15 @@ public class AddBundleCommandHandler(IUnitOfWork unitOfWork, IFileStorageService
         if (!allowedProductsId.Any() || requestedProductIds.Except(allowedProductsId).Any())
             return Result.Failure<BundleDetailResponse>(ProductErrors.NotFound);
 
-        var bundlesWithSameCount = await _unitOfWork.Bundles
-            .FindAllAsync(b => b.BundleItems.Count == requestedProductIds.Count, [nameof(Bundle.BundleItems)], cancellationToken);
+        var bundlesWithSameCountChecker = await _unitOfWork.Bundles
+            .AnyWithWhereAsync
+            (
+                b => b.BundleItems.All(bi => requestedProductIds.Contains(bi.ProductId)),
+                b => b.BundleItems.Count == requestedProductIds.Count,
+                cancellationToken
+            );
 
-        if (bundlesWithSameCount.Any(b => requestedProductIds.SetEquals(b.BundleItems.Select(bi => bi.ProductId))))
+        if (bundlesWithSameCountChecker)
             return Result.Failure<BundleDetailResponse>(BundleErrors.DuplicatedProducts);
 
         var bundle = command.Request.Adapt<Bundle>();
@@ -48,6 +53,14 @@ public class AddBundleCommandHandler(IUnitOfWork unitOfWork, IFileStorageService
 
         await _cache.RemoveAsync([Cache.Keys.Bundles(true), Cache.Keys.Bundles(false)], cancellationToken);
 
-        return Result.Success(bundle.Adapt<BundleDetailResponse>());
+        var response = await _unitOfWork.Bundles.FindAsync(
+            x => x.Id == bundle.Id,
+            [
+                $"{nameof(Bundle.BundleItems)}.{nameof(BundleItem.Product)}.{nameof(Product.Type)}",
+                $"{nameof(Bundle.BundleItems)}.{nameof(BundleItem.Product)}.{nameof(Product.Category)}"
+            ],
+            cancellationToken);
+
+        return Result.Success(response!.Adapt<BundleDetailResponse>());
     }
 }

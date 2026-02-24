@@ -7,5 +7,6 @@ public record BundleResponse(
     int RemainingDays,
     int QuantityAvailable,
     decimal OldPrice,
-    decimal SellingPrice
+    decimal SellingPrice,
+    string? ImageUrl
 );

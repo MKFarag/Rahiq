@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Bundles.GetAllBundles;
+namespace Application.Feathers.Bundles.GetAllBundles;
 
 public class GetAllBundlesQueryHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<GetAllBundlesQuery, IEnumerable<BundleResponse>>
 {
@@ -14,8 +14,8 @@ public class GetAllBundlesQueryHandler(IUnitOfWork unitOfWork, ICacheService cac
                 async token => await _unitOfWork.Bundles
                 .FindAllProjectionAsync<BundleResponse>
                 (
-                    x => request.IncludeNotAvailable || x.IsActive,
-                    [$"{nameof(Bundle.BundleItems)}.{nameof(BundleItem.Product)}"],
+                    x => request.IncludeNotAvailable || (x.EndAt > DateOnly.FromDateTime(DateTime.UtcNow) && x.QuantityAvailable > 0),
+                    [$"{nameof(Bundle.BundleItems)}.{nameof(BundleItem.Product)}", QueryHint.SplitQuery],
                     token
                 ),
                 null,

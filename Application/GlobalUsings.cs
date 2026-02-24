@@ -1,4 +1,4 @@
-﻿global using Application.Abstraction.Messaging;
+global using Application.Abstraction.Messaging;
 global using Application.Contracts.Auth;
 global using Application.Contracts.Bundles;
 global using Application.Contracts.Carts;
@@ -14,6 +14,7 @@ global using Domain.Constants;
 global using Domain.Entities;
 global using Domain.Errors;
 global using Domain.Repositories;
+global using Domain.Settings;
 global using FluentValidation;
 global using Mapster;
 global using System.Linq.Expressions;

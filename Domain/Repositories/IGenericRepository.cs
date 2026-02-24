@@ -206,6 +206,11 @@ public interface IGenericRepository<TEntity> where TEntity : class
     /// <param name="predicate">Filter condition</param>
     Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
+    /// <summary>Check if any entities match condition with additional where predicate</summary>
+    /// <param name="anyPredicate">Any's filter condition</param>
+    /// <param name="wherePredicate">Where's filter condition</param>
+    Task<bool> AnyWithWhereAsync(Expression<Func<TEntity, bool>> anyPredicate, Expression<Func<TEntity, bool>> wherePredicate, CancellationToken cancellationToken = default);
+
     /// <summary>Attach entity to context for tracking</summary>
     /// <param name="entity">Entity to attach</param>
     void Attach(TEntity entity);

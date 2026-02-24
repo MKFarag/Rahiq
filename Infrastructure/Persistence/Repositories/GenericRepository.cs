@@ -184,7 +184,10 @@ public class GenericRepository<TEntity>(ApplicationDbContext context) : IGeneric
         => await _dbSet.CountAsync(predicate, cancellationToken);
 
     public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
-        => await _dbSet.AnyAsync(predicate, cancellationToken);
+        => await _dbSet.AsNoTracking().AnyAsync(predicate, cancellationToken);
+
+    public async Task<bool> AnyWithWhereAsync(Expression<Func<TEntity, bool>> anyPredicate, Expression<Func<TEntity, bool>> wherePredicate, CancellationToken cancellationToken = default)
+        => await _dbSet.AsNoTracking().Where(wherePredicate).AnyAsync(anyPredicate, cancellationToken);
 
     public void Attach(TEntity entity)
         => _dbSet.Attach(entity);

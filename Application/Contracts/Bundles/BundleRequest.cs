@@ -30,7 +30,9 @@ public class BundleRequestValidator : AbstractValidator<BundleRequest>
         RuleFor(x => x.ProductsId)
             .NotEmpty()
             .Must(x => x.Count() > 1)
-            .WithMessage("You must enter more than one product.");
+            .WithMessage("You must enter more than one product.")
+            .Must(x => x.Count() <= x.Distinct().Count())
+            .WithMessage("You cannot enter duplicated products.");
     }
 }
 
