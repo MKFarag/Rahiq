@@ -15,7 +15,7 @@ public class GetAllOrdersByStatusQueryHandler(IUnitOfWork unitOfWork) : IRequest
                 x => x.Status == status,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
-                [nameof(Order.Shipping), nameof(Order.Payment), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
+                [nameof(Order.OrderItems)],
                 cancellationToken
             );
 

@@ -25,12 +25,6 @@ public class MappingConfiguration : IRegister
             .Map(dest => dest.CartProducts, src => src.Product)
             .Map(dest => dest.CartBundle, src => src.Bundle);
 
-        config.NewConfig<Product, OrderProductResponse>()
-            .Map(dest => dest.UnitPrice, src => src.SellingPrice);
-
-        config.NewConfig<Order, OrderResponse>()
-            .Map(dest => dest.OrderDate, src => DateOnly.FromDateTime(src.Date));
-
         config.NewConfig<(User user, IList<string> roles), UserResponse>()
             .Map(dest => dest, src => src.user)
             .Map(dest => dest.Roles, src => src.roles);
@@ -48,5 +42,14 @@ public class MappingConfiguration : IRegister
             .Map(dest => dest.CustomerId, src => src.CustomerId)
             .Map(dest => dest.OrderDate, src => src.Date)
             .Map(dest => dest.Total, src => src.GrandTotal);
+
+        config.NewConfig<Product, OrderItemResponse>()
+            .Map(dest => dest.UnitPrice, src => src.SellingPrice);
+
+        config.NewConfig<Order, OrderDetailsResponse>()
+            .Map(dest => dest.OrderDate, src => DateOnly.FromDateTime(src.Date));
+
+        config.NewConfig<Order, OrderResponse>()
+            .Map(dest => dest.NumberOfItems, src => src.OrderItems.Count());
     }
 }

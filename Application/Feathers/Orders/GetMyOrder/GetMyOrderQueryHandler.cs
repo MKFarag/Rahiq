@@ -1,10 +1,10 @@
 namespace Application.Feathers.Orders.GetMyOrder;
 
-public class GetMyOrderQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetMyOrderQuery, Result<OrderResponse>>
+public class GetMyOrderQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetMyOrderQuery, Result<OrderDetailsResponse>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Result<OrderResponse>> Handle(GetMyOrderQuery request, CancellationToken cancellationToken = default)
+    public async Task<Result<OrderDetailsResponse>> Handle(GetMyOrderQuery request, CancellationToken cancellationToken = default)
     {
         var order = await _unitOfWork.Orders
             .FindAsync
@@ -15,11 +15,11 @@ public class GetMyOrderQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<Ge
             );
 
         if (order is null)
-            return Result.Failure<OrderResponse>(OrderErrors.NotFound);
+            return Result.Failure<OrderDetailsResponse>(OrderErrors.NotFound);
 
         if (order.CustomerId != request.UserId)
-            return Result.Failure<OrderResponse>(OrderErrors.InvalidPermission);
+            return Result.Failure<OrderDetailsResponse>(OrderErrors.InvalidPermission);
 
-        return Result.Success(order.Adapt<OrderResponse>());
+        return Result.Success(order.Adapt<OrderDetailsResponse>());
     }
 }

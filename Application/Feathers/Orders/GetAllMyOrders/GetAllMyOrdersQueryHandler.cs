@@ -9,18 +9,13 @@ public class GetAllMyOrdersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
         if (request.Year < 2026)
             return EmptyPaginatedList.Create<OrderResponse>();
 
-        int year = request.Year;
-
-        if (request.Year == 0)
-            year = DateTime.UtcNow.Year;
-
         var orders = await _unitOfWork.Orders
             .FindPaginatedListAsync<OrderResponse>
             (
                 x => x.CustomerId == request.UserId && x.Date.Year == request.Year,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
-                [nameof(Order.Shipping), nameof(Order.Payment), $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Bundle)}", $"{nameof(Order.OrderItems)}.{nameof(OrderItem.Product)}"],
+                [nameof(Order.OrderItems)],
                 cancellationToken
             );
 

@@ -1,7 +1,10 @@
 ﻿namespace Application.Contracts.Order;
 
 public record OrderItemResponse(
-    OrderProductResponse Product,
+    int Id,
+    string Name,
+    decimal UnitPrice,
+    string? ImageUrl,
     int Quantity,
     decimal Total
 );

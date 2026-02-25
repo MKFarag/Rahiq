@@ -1,10 +1,10 @@
 namespace Application.Feathers.Orders.GetOrder;
 
-public class GetOrderQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetOrderQuery, Result<OrderResponse>>
+public class GetOrderQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetOrderQuery, Result<OrderDetailsResponse>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Result<OrderResponse>> Handle(GetOrderQuery request, CancellationToken cancellationToken = default)
+    public async Task<Result<OrderDetailsResponse>> Handle(GetOrderQuery request, CancellationToken cancellationToken = default)
     {
         var order = await _unitOfWork.Orders
             .FindAsync
@@ -15,7 +15,7 @@ public class GetOrderQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetO
             );
 
         return order is null
-            ? Result.Failure<OrderResponse>(OrderErrors.NotFound)
-            : Result.Success(order.Adapt<OrderResponse>());
+            ? Result.Failure<OrderDetailsResponse>(OrderErrors.NotFound)
+            : Result.Success(order.Adapt<OrderDetailsResponse>());
     }
 }
