@@ -1,4 +1,4 @@
-﻿namespace Application.Feathers.Orders.AddOrder;
+namespace Application.Feathers.Orders.AddOrder;
 
 public class AddOrderCommandHandler(IUnitOfWork unitOfWork, ICacheService cache) : IRequestHandler<AddOrderCommand, Result<OrderResponse>>
 {
@@ -32,19 +32,19 @@ public class AddOrderCommandHandler(IUnitOfWork unitOfWork, ICacheService cache)
             })],
         };
 
-        foreach (var item in order.OrderItems)
+        var bundlesInCart = cart
+            .Where(x => x.IsBundle)
+            .GroupBy(x => x.BundleId)
+            .Select(g => new { Bundle = g.First().Bundle!, TotalQuantity = g.Sum(x => x.Quantity) });
+
+        foreach (var entry in bundlesInCart)
         {
-            if (item.IsProduct)
-                continue;
-
-            var bundle = await _unitOfWork.Bundles.GetAsync([item.BundleId!], cancellationToken);
-
-            if (!bundle!.IsActive)
+            if (!entry.Bundle.IsActive)
                 return Result.Failure<OrderResponse>(BundleErrors.NotActive);
 
-            bundle!.QuantityAvailable -= item.Quantity;
+            entry.Bundle.QuantityAvailable -= entry.TotalQuantity;
 
-            if (bundle.QuantityAvailable < 0)
+            if (entry.Bundle.QuantityAvailable < 0)
                 return Result.Failure<OrderResponse>(BundleErrors.InvalidQuantity);
         }
 

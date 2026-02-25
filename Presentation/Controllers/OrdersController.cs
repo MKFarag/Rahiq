@@ -29,7 +29,7 @@ public class OrdersController(ISender sender) : ControllerBase
     [Authorize(Roles = DefaultRoles.Customer.Name)]
     public async Task<IActionResult> GetMyOrders([FromQuery] SimpleRequestFilters filters, [FromQuery] int year, CancellationToken cancellationToken)
         => Ok(await _sender.Send(new GetAllMyOrdersQuery(filters, User.GetId()!, year), cancellationToken));
-
+     
     [HttpGet("me/{id}")]
     [Authorize(Roles = DefaultRoles.Customer.Name)]
     public async Task<IActionResult> GetMyOrder([FromRoute] int id, CancellationToken cancellationToken)
@@ -68,7 +68,7 @@ public class OrdersController(ISender sender) : ControllerBase
         => Ok(await _sender.Send(new GetAllOrdersByMonthQuery(filters, month), cancellationToken));
 
     [HttpPost("")]
-    [HasPermission(Permissions.AddOrder)]
+    [Authorize(Roles = DefaultRoles.Customer.Name)]
     public async Task<IActionResult> Add(CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new AddOrderCommand(User.GetId()!), cancellationToken);

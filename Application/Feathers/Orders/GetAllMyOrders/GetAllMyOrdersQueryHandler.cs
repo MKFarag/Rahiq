@@ -9,6 +9,11 @@ public class GetAllMyOrdersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
         if (request.Year < 2026)
             return EmptyPaginatedList.Create<OrderResponse>();
 
+        int year = request.Year;
+
+        if (request.Year == 0)
+            year = DateTime.UtcNow.Year;
+
         var orders = await _unitOfWork.Orders
             .FindPaginatedListAsync<OrderResponse>
             (
