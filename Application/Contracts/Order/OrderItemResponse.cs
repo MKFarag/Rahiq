@@ -1,4 +1,4 @@
-﻿namespace Application.Contracts.Order;
+namespace Application.Contracts.Order;
 
 public record OrderItemResponse(
     int Id,
@@ -6,5 +6,6 @@ public record OrderItemResponse(
     decimal UnitPrice,
     string? ImageUrl,
     int Quantity,
-    decimal Total
+    decimal Total,
+    bool IsBundle
 );

@@ -2,7 +2,8 @@ namespace Application.Contracts.Order;
 
 public record OrderDetailsResponse(
     int Id,
-    DateOnly OrderDate,
+    string CustomerId,
+    DateTime OrderDate,
     IEnumerable<OrderItemResponse> OrderItems,
     decimal Total,
     decimal GrandTotal,
