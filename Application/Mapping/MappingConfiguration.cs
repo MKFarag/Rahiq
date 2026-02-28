@@ -43,13 +43,16 @@ public class MappingConfiguration : IRegister
             .Map(dest => dest.OrderDate, src => src.Date)
             .Map(dest => dest.Total, src => src.GrandTotal);
 
-        config.NewConfig<Product, OrderItemResponse>()
-            .Map(dest => dest.UnitPrice, src => src.SellingPrice);
+        config.NewConfig<OrderItem, OrderItemResponse>()
+            .Map(dest => dest.Name, src => src.IsBundle ? src.Bundle!.Name : src.Product!.Name)
+            .Map(dest => dest.ImageUrl, src => src.IsBundle ? src.Bundle!.ImageUrl : src.Product!.ImageUrl);
 
         config.NewConfig<Order, OrderDetailsResponse>()
-            .Map(dest => dest.OrderDate, src => DateOnly.FromDateTime(src.Date));
+            .Map(dest => dest.OrderDate, src => src.Date)
+            .Map(dest => dest.Status, src => src.Status.ToString());
 
         config.NewConfig<Order, OrderResponse>()
-            .Map(dest => dest.NumberOfItems, src => src.OrderItems.Count());
+            .Map(dest => dest.OrderDate, src => DateOnly.FromDateTime(src.Date))
+            .Map(dest => dest.NumberOfItems, src => src.OrderItems.Sum(x => x.Quantity));
     }
 }
