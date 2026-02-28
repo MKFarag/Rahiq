@@ -15,6 +15,7 @@ public class GetAllOrdersByMonthQueryHandler(IUnitOfWork unitOfWork) : IRequestH
                 x => x.Date.Month == request.Month,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
+                nameof(Order.Id),
                 [nameof(Order.OrderItems)],
                 cancellationToken
             );

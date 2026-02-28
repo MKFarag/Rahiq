@@ -11,7 +11,7 @@ public class AddOrderCommandHandler(IUnitOfWork unitOfWork, ICacheService cache)
             .FindAllAsync
             (
                 x => x.CustomerId == request.UserId,
-                [nameof(Cart.Product), nameof(Cart.Bundle)],
+                [nameof(Cart.Product), $"{nameof(Cart.Bundle)}.{nameof(Bundle.BundleItems)}.{nameof(BundleItem.Product)}"],
                 cancellationToken
             );
 
@@ -21,31 +21,38 @@ public class AddOrderCommandHandler(IUnitOfWork unitOfWork, ICacheService cache)
         var order = new Order
         {
             CustomerId = request.UserId,
+            Date = DateTime.UtcNow,
             Status = OrderStatus.Pending,
             Total = cart.Sum(x => x.TotalPrice),
-            OrderItems = [.. cart.Select(x => new OrderItem
-            {
-                ProductId = x.IsProduct ? x.ProductId : null,
-                BundleId = x.IsBundle ? x.BundleId : null,
-                Quantity = x.Quantity,
-                UnitPrice = x.UnitPrice
-            })],
+            OrderItems = []
         };
 
-        var bundlesInCart = cart
-            .Where(x => x.IsBundle)
-            .GroupBy(x => x.BundleId)
-            .Select(g => new { Bundle = g.First().Bundle!, TotalQuantity = g.Sum(x => x.Quantity) });
-
-        foreach (var entry in bundlesInCart)
+        foreach (var item in cart)
         {
-            if (!entry.Bundle.IsActive)
-                return Result.Failure<OrderResponse>(BundleErrors.NotActive);
+            if (item.IsProduct)
+                order.OrderItems.Add(new OrderItem
+                {
+                    ProductId = item.ProductId!.Value,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice
+                });
+            else
+            {
+                order.OrderItems.Add(new OrderItem
+                {
+                    BundleId = item.BundleId!.Value,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice
+                });
 
-            entry.Bundle.QuantityAvailable -= entry.TotalQuantity;
+                if (!item.Bundle!.IsActive)
+                    return Result.Failure<OrderResponse>(BundleErrors.NotActive);
 
-            if (entry.Bundle.QuantityAvailable < 0)
-                return Result.Failure<OrderResponse>(BundleErrors.InvalidQuantity);
+                item.Bundle.QuantityAvailable -= item.Quantity;
+
+                if (item.Bundle.QuantityAvailable < 0)
+                    return Result.Failure<OrderResponse>(BundleErrors.InvalidQuantity);
+            }
         }
 
         await _unitOfWork.Orders.AddAsync(order, cancellationToken);

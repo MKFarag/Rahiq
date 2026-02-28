@@ -15,6 +15,7 @@ public class GetAllMyOrdersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
                 x => x.CustomerId == request.UserId && x.Date.Year == request.Year,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
+                nameof(Order.Id),
                 [nameof(Order.OrderItems)],
                 cancellationToken
             );

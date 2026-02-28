@@ -15,6 +15,7 @@ public class GetAllOrdersByYearQueryHandler(IUnitOfWork unitOfWork) : IRequestHa
                 x => x.Date.Year == request.Year,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
+                nameof(Order.Id),
                 [nameof(Order.OrderItems)],
                 cancellationToken
             );
