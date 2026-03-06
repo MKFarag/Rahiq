@@ -26,6 +26,14 @@ public sealed class Order
         Status = OrderStatus.Processing;
     }
 
+    public void Pay(int paymentId)
+    {
+        if (Status != OrderStatus.Pending)
+            throw new InvalidOperationException("Order must be Pending.");
+        PaymentId = paymentId;
+        Status = OrderStatus.Paid;
+    }
+
     public void Ship(int shippingId)
     {
         if (Status != OrderStatus.Processing)

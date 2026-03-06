@@ -6,13 +6,20 @@ public class GetAllOrdersByMonthQueryHandler(IUnitOfWork unitOfWork) : IRequestH
 
     public async Task<IPaginatedList<OrderResponse>> Handle(GetAllOrdersByMonthQuery request, CancellationToken cancellationToken = default)
     {
-        if (request.Month is > 12 or < 1)
+        var month = request.Month switch
+        {
+            0 => DateTime.Now.Month,
+            > 12 or < 1 => -1,
+            _ => request.Month
+        };
+
+        if (month == -1)
             return EmptyPaginatedList.Create<OrderResponse>();
 
         var orders = await _unitOfWork.Orders
             .FindPaginatedListAsync<OrderResponse>
             (
-                x => x.Date.Month == request.Month,
+                x => x.Date.Month == month,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
                 nameof(Order.Id),

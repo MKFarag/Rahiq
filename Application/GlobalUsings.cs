@@ -22,3 +22,4 @@ global using Application.Contracts.Order;
 global using Application.Contracts.Shippings;
 global using Application.Contracts.Users;
 global using Application.Contracts.Roles;
+global using Application.Contracts.Payments;

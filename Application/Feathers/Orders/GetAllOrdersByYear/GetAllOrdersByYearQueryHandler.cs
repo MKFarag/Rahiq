@@ -6,13 +6,19 @@ public class GetAllOrdersByYearQueryHandler(IUnitOfWork unitOfWork) : IRequestHa
 
     public async Task<IPaginatedList<OrderResponse>> Handle(GetAllOrdersByYearQuery request, CancellationToken cancellationToken = default)
     {
-        if (request.Year < 2026)
+        var year = request.Year switch
+        {
+            0 => DateTime.Now.Year,
+            _ => request.Year
+        };
+
+        if (year < 2026)
             return EmptyPaginatedList.Create<OrderResponse>();
 
         var orders = await _unitOfWork.Orders
             .FindPaginatedListAsync<OrderResponse>
             (
-                x => x.Date.Year == request.Year,
+                x => x.Date.Year == year,
                 request.Filters.PageNumber,
                 request.Filters.PageSize,
                 nameof(Order.Id),

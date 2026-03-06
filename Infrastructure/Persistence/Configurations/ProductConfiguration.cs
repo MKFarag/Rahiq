@@ -16,7 +16,7 @@ internal class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder
             .Property(p => p.Price)
-            .HasPrecision(5, 2);
+            .HasPrecision(8, 2);
 
         // Index
 

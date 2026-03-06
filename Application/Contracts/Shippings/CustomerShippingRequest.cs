@@ -1,6 +1,7 @@
 ﻿namespace Application.Contracts.Shippings;
 
 public record CustomerShippingRequest(
+    int OrderId,
     string Address,
     string Phone
 );
@@ -11,13 +12,16 @@ public class CustomerShippingRequestValidator : AbstractValidator<CustomerShippi
 {
     public CustomerShippingRequestValidator()
     {
+        RuleFor(x => x.OrderId)
+            .NotEmpty();
+
         RuleFor(x => x.Address)
             .NotEmpty()
             .MaximumLength(200);
 
         RuleFor(x => x.Phone)
             .NotEmpty()
-            .MaximumLength(11)
+            .Length(11)
             .Matches(RegexPatterns.OnlyNumbers)
             .WithMessage("Phone must contain only numbers.");
     }

@@ -1,6 +1,7 @@
 #region Usings
 
 using Application.Feathers.Payments.AddOrderPayment;
+using Application.Feathers.Payments.GetAllNotVerifiedPayments;
 using Application.Feathers.Payments.VerifyPayment;
 using Presentation.DTOs.Payments;
 
@@ -15,6 +16,11 @@ namespace Presentation.Controllers;
 public class PaymentsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
+
+    [HttpGet("")]
+    [HasPermission(Permissions.PaymentVerify)]
+    public async Task<IActionResult> GetAllNotVerified(CancellationToken cancellationToken)
+        => Ok(await _sender.Send(new GetAllNotVerifiedPaymentsCommand(), cancellationToken));
 
     [HttpPost("{orderId}")]
     [Authorize(Roles = DefaultRoles.Customer.Name)]

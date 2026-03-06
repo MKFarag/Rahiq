@@ -26,7 +26,7 @@ public class ShippingRequestValidator : AbstractValidator<ShippingRequest>
         When(x => x.Cost is not null, () => 
             RuleFor(x => x.Cost)
                 .GreaterThanOrEqualTo(0)
-                .PrecisionScale(4, 2, true)
+                .PrecisionScale(6, 2, true)
         );
 
         RuleFor(x => x.Code)

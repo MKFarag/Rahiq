@@ -12,7 +12,7 @@ internal class ShippingConfiguration : IEntityTypeConfiguration<Shipping>
 
         builder
             .Property(s => s.Cost)
-            .HasPrecision(4, 2);
+            .HasPrecision(6, 2);
 
         builder
             .Property(s => s.Code)

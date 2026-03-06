@@ -54,5 +54,10 @@ public class MappingConfiguration : IRegister
         config.NewConfig<Order, OrderResponse>()
             .Map(dest => dest.OrderDate, src => DateOnly.FromDateTime(src.Date))
             .Map(dest => dest.NumberOfItems, src => src.OrderItems.Sum(x => x.Quantity));
+
+        config.NewConfig<Order, PaymentResponse>()
+            .Map(dest => dest, src => src.Payment!)
+            .Map(dest => dest.PaymentId, src => src.Payment!.Id)
+            .Map(dest => dest.OrderId, src => src.Id);
     }
 }

@@ -36,7 +36,7 @@ public class ProductRequestValidator : AbstractValidator<ProductRequest>
 
         RuleFor(x => x.Price)
             .NotEmpty()
-            .PrecisionScale(5, 2, true);
+            .PrecisionScale(8, 2, true);
 
         RuleFor(x => x.DiscountPercentage)
             .InclusiveBetween(0, 100);
