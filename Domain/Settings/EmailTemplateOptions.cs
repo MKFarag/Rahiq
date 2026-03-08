@@ -1,4 +1,4 @@
-﻿namespace Domain.Settings;
+namespace Domain.Settings;
 
 public class EmailTemplateOptions
 {
@@ -41,5 +41,6 @@ public class EmailTemplateOptions
         public static readonly string BundleQuantityWarning = nameof(BundleQuantityWarning);
         public static readonly string PendingOrderList = nameof(PendingOrderList);
         public static readonly string CanceledOrderList = nameof(CanceledOrderList);
+        public static readonly string PendingPaymentApprovalList = nameof(PendingPaymentApprovalList);
     }
 }

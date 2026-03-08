@@ -72,6 +72,11 @@ RecurringJob.AddOrUpdate<INotificationService>(
     x => x.SendQuantityWarningAsync(),
     Cron.Daily);
 
+RecurringJob.AddOrUpdate<INotificationService>(
+    "PendingPaymentApproval",
+    x => x.SendPendingPaymentApprovalListAsync(),
+    Cron.Daily);
+
 #endregion
 
 app.UseCors();

@@ -43,6 +43,12 @@ public class MappingConfiguration : IRegister
             .Map(dest => dest.OrderDate, src => src.Date)
             .Map(dest => dest.Total, src => src.GrandTotal);
 
+        config.NewConfig<Order, PendingPaymentApprovalInfo>()
+            .Map(dest => dest.OrderId, src => src.Id)
+            .Map(dest => dest.CustomerId, src => src.CustomerId)
+            .Map(dest => dest.PaymentId, src => src.Payment!.Id)
+            .Map(dest => dest.Amount, src => src.Payment!.Amount);
+
         config.NewConfig<OrderItem, OrderItemResponse>()
             .Map(dest => dest.Name, src => src.IsBundle ? src.Bundle!.Name : src.Product!.Name)
             .Map(dest => dest.ImageUrl, src => src.IsBundle ? src.Bundle!.ImageUrl : src.Product!.ImageUrl);

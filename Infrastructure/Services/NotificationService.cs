@@ -1,4 +1,4 @@
-﻿using Application.Contracts.Notifications;
+using Application.Contracts.Notifications;
 
 namespace Infrastructure.Services;
 
@@ -125,6 +125,29 @@ public class NotificationService
         await EnqueueEmailAsync(_templateOptions.SupportEmail, $"{_projectName} Daily Canceled Orders Report", EmailTemplateOptions.TemplatesNames.CanceledOrderList, placeholders);
     }
 
+    public async Task SendPendingPaymentApprovalListAsync()
+    {
+        var orders = await _unitOfWork.Orders
+            .FindAllProjectionAsync<PendingPaymentApprovalInfo>
+            (
+                x => x.Status == OrderStatus.Paid && x.Payment != null && !x.Payment.IsProofed,
+                [nameof(Order.Payment)]
+            );
+
+        if (!orders.Any()) return;
+
+        var tableHtml = BuildPendingPaymentTable(orders);
+
+        var placeholders = BuildPlaceholders(_projectName + "'s Manager", new Dictionary<string, string>
+        {
+            { EmailTemplateOptions.Placeholders.ReportDate, DateTime.UtcNow.ToString("MMMM dd, yyyy") },
+            { EmailTemplateOptions.Placeholders.TotalCount, orders.Count().ToString() },
+            { EmailTemplateOptions.Placeholders.ItemsTable, tableHtml }
+        });
+
+        await EnqueueEmailAsync(_templateOptions.SupportEmail, $"{_projectName} Pending Payment Approval Report", EmailTemplateOptions.TemplatesNames.PendingPaymentApprovalList, placeholders);
+    }
+
     private async Task EnqueueEmailAsync(string email, string subject, string templateName, Dictionary<string, string> placeholders)
     {
         var body = await _templateRenderer.RenderAsync(templateName, placeholders);
@@ -162,6 +185,22 @@ public class NotificationService
                     <td style=""padding: 12px 15px; border-bottom: 1px solid #eee; color: #2c3e50;"">{bundle.BundleId}</td>
                     <td style=""padding: 12px 15px; border-bottom: 1px solid #eee; color: #2c3e50; font-weight: 500;"">{bundle.BundleName}</td>
                     <td style=""padding: 12px 15px; border-bottom: 1px solid #eee; color: #666; font-size: 13px;"">{products}</td>
+                </tr>");
+        }
+        return sb.ToString();
+    }
+
+    private static string BuildPendingPaymentTable(IEnumerable<PendingPaymentApprovalInfo> orders)
+    {
+        var sb = new StringBuilder();
+        foreach (var order in orders)
+        {
+            sb.Append($@"
+                <tr>
+                    <td style=""padding: 12px 15px; border-bottom: 1px solid #eee; color: #2c3e50; font-weight: 500;"">{order.OrderId}</td>
+                    <td style=""padding: 12px 15px; border-bottom: 1px solid #eee; color: #666; font-size: 12px;"">{order.CustomerId}</td>
+                    <td style=""padding: 12px 15px; border-bottom: 1px solid #eee; color: #2c3e50;"">{order.PaymentId}</td>
+                    <td style=""padding: 12px 15px; border-bottom: 1px solid #eee; color: #2c3e50; font-weight: 600;"">${order.Amount:N2}</td>
                 </tr>");
         }
         return sb.ToString();

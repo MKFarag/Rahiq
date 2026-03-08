@@ -1,4 +1,4 @@
-﻿namespace Application.Interfaces;
+namespace Application.Interfaces;
 
 public interface INotificationService
 {
@@ -10,4 +10,5 @@ public interface INotificationService
     Task SendQuantityWarningAsync();
     Task SendPendingOrderListAsync();
     Task SendCanceledOrderListAsync();
+    Task SendPendingPaymentApprovalListAsync();
 }
