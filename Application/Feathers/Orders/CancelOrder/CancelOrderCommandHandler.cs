@@ -6,11 +6,8 @@ public class CancelOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
 
     public async Task<Result> Handle(CancelOrderCommand request, CancellationToken cancellationToken = default)
     {
-        if (await _unitOfWork.Orders.GetAsync([request.OrderId], cancellationToken) is not { } order)
+        if (await _unitOfWork.Orders.GetAsync([request.Id], cancellationToken) is not { } order)
             return Result.Failure(OrderErrors.NotFound);
-
-        if (order.CustomerId != request.UserId)
-            return Result.Failure(OrderErrors.InvalidPermission);
 
         if (!order.CanBeCancelled)
             return Result.Failure(OrderErrors.CannotBeCancelled);

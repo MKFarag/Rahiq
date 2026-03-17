@@ -26,7 +26,6 @@ public class AddOrderPaymentCommandHandler(IUnitOfWork unitOfWork, IFileStorageS
         var payment = new Payment
         {
             ImageUrl = relativePath,
-            Amount = request.Amount,
             IsProofed = false
         };
 

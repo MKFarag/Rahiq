@@ -1,3 +1,3 @@
 namespace Application.Feathers.Payments.VerifyPayment;
 
-public record VerifyPaymentCommand(int PaymentId) : IRequest<Result>;
+public record VerifyPaymentCommand(int PaymentId, decimal Amount) : IRequest<Result>;

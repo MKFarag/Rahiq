@@ -1,6 +1,7 @@
 #region Usings
 
 using Application.Interfaces;
+using Domain.Repositories;
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
 using HealthChecks.UI.Client;
@@ -33,6 +34,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseExceptionHandler();
+
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
@@ -57,10 +60,15 @@ new HangfireCustomBasicAuthenticationFilter
 
 #region Hangfire Recurring Jobs Scheduling
 
+RecurringJob.AddOrUpdate<IUserRepository>(
+    "RemoveExpiredRefreshTokens",
+    x => x.RemoveExpiredRefreshTokensAsync(),
+    Cron.Daily);
+
 RecurringJob.AddOrUpdate<INotificationService>(
-"CanceledOrder",
-x => x.SendCanceledOrderListAsync(),
-Cron.Daily);
+    "CanceledOrder",
+    x => x.SendCanceledOrderListAsync(),
+    Cron.Daily);
 
 RecurringJob.AddOrUpdate<INotificationService>(
     "PendingOrder",
@@ -88,8 +96,6 @@ app.UseAuthorization();
 app.UseRateLimiter();
 
 app.MapControllers();
-
-app.UseExceptionHandler();
 
 app.MapStaticAssets();
 

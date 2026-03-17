@@ -8,7 +8,7 @@ public class AddOrderCommandHandler(IUnitOfWork unitOfWork, ICacheService cache)
     public async Task<Result<OrderResponse>> Handle(AddOrderCommand request, CancellationToken cancellationToken = default)
     {
         var cart = await _unitOfWork.Carts
-            .FindAllAsync
+            .TrackedFindAllAsync
             (
                 x => x.CustomerId == request.UserId,
                 [nameof(Cart.Product), $"{nameof(Cart.Bundle)}.{nameof(Bundle.BundleItems)}.{nameof(BundleItem.Product)}"],

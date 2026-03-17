@@ -8,7 +8,7 @@ public class GetAllOrdersByMonthQueryHandler(IUnitOfWork unitOfWork) : IRequestH
     {
         var month = request.Month switch
         {
-            0 => DateTime.Now.Month,
+            0 => DateTime.UtcNow.Month,
             > 12 or < 1 => -1,
             _ => request.Month
         };

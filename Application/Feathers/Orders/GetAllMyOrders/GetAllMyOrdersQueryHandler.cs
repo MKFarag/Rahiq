@@ -9,7 +9,7 @@ public class GetAllMyOrdersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
         int year = request.Year;
 
         if (year == 0)
-            year = DateTime.Now.Year;
+            year = DateTime.UtcNow.Year;
         else if (year < 2026)
             return EmptyPaginatedList.Create<OrderResponse>();
 

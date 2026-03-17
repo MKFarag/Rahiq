@@ -8,7 +8,7 @@ public class GetAllOrdersByYearQueryHandler(IUnitOfWork unitOfWork) : IRequestHa
     {
         var year = request.Year switch
         {
-            0 => DateTime.Now.Year,
+            0 => DateTime.UtcNow.Year,
             _ => request.Year
         };
 

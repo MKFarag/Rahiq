@@ -40,7 +40,7 @@ public class AddBundleCommandHandler(IUnitOfWork unitOfWork, IFileStorageService
 
         if (command.Image is not null)
         {
-            var fileName = $"{bundle.Id}-{Path.GetFileName(command.Image.FileName)}.{Path.GetExtension(command.Image.FileName)}";
+            var fileName = $"{bundle.Id}-{Path.GetFileName(command.Image.FileName)}{Path.GetExtension(command.Image.FileName)}";
 
             await _fileStorageService.SaveAsync(command.Image.Stream, fileName, cancellationToken);
 

@@ -4,6 +4,7 @@ using Application.Contracts.Carts;
 using Application.Feathers.Carts.AddToCart;
 using Application.Feathers.Carts.ClearMyCart;
 using Application.Feathers.Carts.GetMyCart;
+using Application.Feathers.Carts.RemoveCartItem;
 using Application.Feathers.Carts.UpdateCart;
 
 #endregion
@@ -110,6 +111,31 @@ public class CartsController(ISender sender) : ControllerBase
     public async Task<IActionResult> UpdateCartProduct([FromRoute] int id, [FromBody] UpdateCartRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new UpdateCartCommand(User.GetId()!, id, request.Quantity), cancellationToken);
+
+        return result.IsSuccess
+            ? NoContent()
+            : result.ToProblem();
+    }
+
+    /// <summary>
+    /// Remove an item from customer's cart.
+    /// </summary>
+    /// <remarks>
+    /// Remove an item from customer's shopping cart.
+    /// </remarks>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <param name="id">The unique identifier of the cart item.</param>
+    /// <returns>No content on success.</returns>
+    /// <response code="204">If the cart was successfully cleared.</response>
+    /// <response code="401">If the user is unauthorized.</response>
+    /// <response code="404">If the cart item is not found.</response>
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> RemoveItem([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new RemoveCartItemCommand(id, User.GetId()!), cancellationToken);
 
         return result.IsSuccess
             ? NoContent()

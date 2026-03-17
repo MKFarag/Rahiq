@@ -8,7 +8,7 @@ internal class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
 
         builder
             .Property(oi => oi.UnitPrice)
-            .HasPrecision(5, 2);
+            .HasPrecision(8, 2);
 
         builder
             .Property(oi => oi.Quantity)

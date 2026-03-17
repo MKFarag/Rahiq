@@ -37,7 +37,7 @@ public static class DependencyInjection
             services.AddFluentValidationConfig();
             services.AddMailConfig(configuration);
             services.AddAuthConfig(configuration);
-            services.AddRateLimiterConfig();
+            services.AddRateLimiterConfig(configuration);
 
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IFileStorageService, FileStorageService>();
@@ -76,15 +76,16 @@ public static class DependencyInjection
             return services;
         }
 
-        private IServiceCollection AddRateLimiterConfig()
+        private IServiceCollection AddRateLimiterConfig(IConfiguration configuration)
         {
             services.AddOptions<RateLimitingOptions>()
                 .BindConfiguration(nameof(RateLimitingOptions))
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
-            var provider = services.BuildServiceProvider();
-            var settings = provider.GetRequiredService<IOptions<RateLimitingOptions>>().Value;
+            var settings = configuration
+                .GetSection(nameof(RateLimitingOptions))
+                .Get<RateLimitingOptions>()!;
 
             services.AddRateLimiter(rateLimiterOptions =>
             {

@@ -25,7 +25,7 @@ public class AddProductCommandHandler(IUnitOfWork unitOfWork, IFileStorageServic
 
         if (command.Image is not null)
         {
-            var fileName = $"{product.Id}-{Path.GetFileName(command.Image.FileName)}.{Path.GetExtension(command.Image.FileName)}";
+            var fileName = $"{product.Id}-{Path.GetFileName(command.Image.FileName)}{Path.GetExtension(command.Image.FileName)}";
 
             await _fileStorageService.SaveAsync(command.Image.Stream, fileName, cancellationToken);
 

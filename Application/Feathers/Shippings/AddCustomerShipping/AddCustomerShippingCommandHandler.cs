@@ -6,8 +6,11 @@ public class AddCustomerShippingCommandHandler(IUnitOfWork unitOfWork) : IReques
 
     public async Task<Result<ShippingResponse>> Handle(AddCustomerShippingCommand command, CancellationToken cancellationToken = default)
     {
-        if (!await _unitOfWork.Orders.AnyAsync(x => x.Id == command.Request.OrderId, cancellationToken))
+        if (await _unitOfWork.Orders.GetAsync([command.Request.OrderId], cancellationToken) is not { } order)
             return Result.Failure<ShippingResponse>(OrderErrors.NotFound);
+
+        if (order.CustomerId != command.UserId)
+            return Result.Failure<ShippingResponse>(OrderErrors.InvalidPermission);
 
         var shipping = command.Request.Adapt<Shipping>();
 

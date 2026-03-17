@@ -1,5 +1,6 @@
 #region Usings
 
+using Application.Contracts.Payments;
 using Application.Feathers.Payments.AddOrderPayment;
 using Application.Feathers.Payments.GetAllNotVerifiedPayments;
 using Application.Feathers.Payments.VerifyPayment;
@@ -75,7 +76,7 @@ public class PaymentsController(ISender sender) : ControllerBase
 
         using var image = request.Image.ToFileData();
 
-        var result = await _sender.Send(new AddOrderPaymentCommand(orderId, request.Amount, image), cancellationToken);
+        var result = await _sender.Send(new AddOrderPaymentCommand(orderId, image), cancellationToken);
 
         return result.IsSuccess
             ? Created()
@@ -89,6 +90,7 @@ public class PaymentsController(ISender sender) : ControllerBase
     /// Marks a specific payment as verified by an administrator.
     /// </remarks>
     /// <param name="paymentId">The unique identifier of the payment to verify.</param>
+    /// <param name="request">The payment request details including amount.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>No content on success.</returns>
     /// <response code="204">If the payment was successfully verified.</response>
@@ -101,9 +103,9 @@ public class PaymentsController(ISender sender) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> Verify([FromRoute] int paymentId, CancellationToken cancellationToken)
+    public async Task<IActionResult> Verify([FromRoute] int paymentId, [FromBody] PaymentVerifyRequest request, CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new VerifyPaymentCommand(paymentId), cancellationToken);
+        var result = await _sender.Send(new VerifyPaymentCommand(paymentId, request.Amount), cancellationToken);
 
         return result.IsSuccess
             ? NoContent()

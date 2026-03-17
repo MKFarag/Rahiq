@@ -1,3 +1,3 @@
 namespace Application.Feathers.Payments.AddOrderPayment;
 
-public record AddOrderPaymentCommand(int OrderId, decimal Amount, FileData Image) : IRequest<Result>;
+public record AddOrderPaymentCommand(int OrderId, FileData Image) : IRequest<Result>;

@@ -13,6 +13,7 @@ public class VerifyPaymentCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
             return Result.Failure(PaymentErrors.AlreadyVerified);
 
         payment.IsProofed = true;
+        payment.Amount = request.Amount;
 
         await _unitOfWork.CompleteAsync(cancellationToken);
 

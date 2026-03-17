@@ -14,6 +14,7 @@ public class ReactivateBundleCommandHandler(IUnitOfWork unitOfWork, ICacheServic
             return Result.Failure(BundleErrors.IsActive);
 
         bundle.EndAt = request.Date;
+        bundle.QuantityAvailable = request.QuantityAvailable;
 
         await _unitOfWork.CompleteAsync(cancellationToken);
 

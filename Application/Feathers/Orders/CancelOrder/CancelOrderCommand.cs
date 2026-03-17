@@ -1,4 +1,3 @@
 ﻿namespace Application.Feathers.Orders.CancelOrder;
 
-public record CancelOrderCommand(int OrderId, string UserId) : IRequest<Result>;
-
+public record CancelOrderCommand(int Id) : IRequest<Result>;

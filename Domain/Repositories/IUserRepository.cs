@@ -89,6 +89,9 @@ public interface IUserRepository
     /// <summary>Revokes a user's refresh token by marking it as inactive.</summary>
     Task<Result> RevokeRefreshTokenAsync(User user, string token, CancellationToken cancellationToken = default);
 
+    /// <summary>Removes all expired refresh tokens from the system.</summary>
+    Task RemoveExpiredRefreshTokensAsync(CancellationToken cancellationToken = default);
+
     /// <summary>Toggle status for a specific user.</summary>
     Task ToggleStatusAsync(User user, CancellationToken cancellationToken = default);
 

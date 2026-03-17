@@ -131,7 +131,7 @@ public class RoleRepository(ApplicationDbContext context, RoleManager<Applicatio
             .Where(r => r.Id == role.Id)
             .ExecuteUpdateAsync
             (
-                r => r.SetProperty(x => x.IsDefault, x => !x.IsDefault)
+                r => r.SetProperty(x => x.IsDisabled, x => !x.IsDisabled)
                 , cancellationToken
             );
 

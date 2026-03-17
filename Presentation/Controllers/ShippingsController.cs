@@ -171,7 +171,7 @@ public class ShippingsController(ISender sender) : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> AddCustomerShipping([FromBody] CustomerShippingRequest request, CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new AddCustomerShippingCommand(request), cancellationToken);
+        var result = await _sender.Send(new AddCustomerShippingCommand(request, User.GetId()!), cancellationToken);
 
         return result.IsSuccess
             ? CreatedAtAction(nameof(GetById), new { result.Value.Id }, result.Value)

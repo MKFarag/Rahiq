@@ -85,7 +85,7 @@ public class UserRepository(ApplicationDbContext context, UserManager<Applicatio
     }
 
     public async Task<bool> ExistsAsync(string id, CancellationToken cancellationToken = default)
-        => await _context.Users.AsNoTracking().AnyAsync(cancellationToken);
+        => await _context.Users.AsNoTracking().AnyAsync(x => x.Id == id, cancellationToken);
 
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
     {
@@ -252,6 +252,11 @@ public class UserRepository(ApplicationDbContext context, UserManager<Applicatio
 
         return Result.Success();
     }
+
+    public async Task RemoveExpiredRefreshTokensAsync(CancellationToken cancellationToken = default)
+        => await _context.Set<RefreshToken>()
+            .Where(t => t.ExpiresOn < DateTime.UtcNow || t.RevokedOn != null)
+            .ExecuteDeleteAsync(cancellationToken);
 
     public async Task ToggleStatusAsync(User user, CancellationToken cancellationToken = default)
         => await _context.Users
