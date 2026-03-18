@@ -2,15 +2,10 @@
 
 using Application.Contracts.Users;
 using Application.Feathers.Users.AddUser;
-using Application.Feathers.Users.ChangeUserEmailRequest;
-using Application.Feathers.Users.ChangeUserPassword;
-using Application.Feathers.Users.ConfirmChangeUserEmail;
 using Application.Feathers.Users.GetAllUsers;
 using Application.Feathers.Users.GetUser;
-using Application.Feathers.Users.GetUserProfile;
 using Application.Feathers.Users.ToggleStatusUser;
 using Application.Feathers.Users.UpdateUser;
-using Application.Feathers.Users.UpdateUserProfile;
 
 #endregion
 

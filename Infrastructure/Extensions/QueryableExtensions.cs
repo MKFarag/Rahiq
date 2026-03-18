@@ -1,5 +1,4 @@
 using System.Linq.Dynamic.Core;
-using Domain.Settings;
 
 namespace Infrastructure.Extensions;
 

@@ -8,7 +8,7 @@ public class RemoveCartItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
     {
         if (!await _unitOfWork.Carts.AnyAsync(x => x.Id == request.CartId && x.CustomerId == request.UserId, cancellationToken))
             return Result.Failure(CartErrors.NotFound);
-        
+
         await _unitOfWork.Carts.ExecuteDeleteAsync(x => x.Id == request.CartId, cancellationToken);
 
         return Result.Success();

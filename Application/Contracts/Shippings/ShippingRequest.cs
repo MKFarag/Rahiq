@@ -23,7 +23,7 @@ public class ShippingRequestValidator : AbstractValidator<ShippingRequest>
             .Matches(RegexPatterns.OnlyNumbers)
             .WithMessage("Phone must contain only numbers.");
 
-        When(x => x.Cost is not null, () => 
+        When(x => x.Cost is not null, () =>
             RuleFor(x => x.Cost)
                 .GreaterThanOrEqualTo(0)
                 .PrecisionScale(6, 2, true)

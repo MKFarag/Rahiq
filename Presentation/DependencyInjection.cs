@@ -11,8 +11,6 @@ using Infrastructure.Persistence.Identities;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Presentation.Abstraction;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
@@ -134,7 +132,7 @@ public static class DependencyInjection
                 #endregion
             });
 
-                return services;
+            return services;
         }
 
         private IServiceCollection AddAuthConfig(IConfiguration configuration)

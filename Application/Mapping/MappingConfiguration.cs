@@ -32,7 +32,7 @@ public class MappingConfiguration : IRegister
         config.NewConfig<Bundle, BundleQuantityWarning>()
             .Map(dest => dest.BundleId, src => src.Id)
             .Map(dest => dest.BundleName, src => src.Name);
-        
+
         config.NewConfig<BundleItem, BundleItemQuantityWarning>()
             .Map(dest => dest.ItemId, src => src.ProductId)
             .Map(dest => dest.ItemName, src => src.Product.Name);

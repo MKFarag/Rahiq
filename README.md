@@ -153,7 +153,7 @@ Bundle  ──── has many (M:M via BundleItem) ──► Product
 | `Product` | `SellingPrice = Price × (1 – DiscountPercentage / 100)` via domain extension method |
 | `Bundle` | `IsActive`, `RemainingDays`, `OldPrice`, `SellingPrice`; time-bounded via `EndAt` |
 | `Cart` | Supports product or bundle entries; `UnitPrice` and `TotalPrice` computed |
-| `Payment` | Upload proof image; admin sets `IsProofed` |
+| `Payment` | Customer uploads proof image; admin reviews and sets the verified amount + `IsProofed` |
 | `Shipping` | Customer-managed address/phone; admin assigns carrier code and cost |
 | `RefreshToken` | `IsExpired`, `IsActive` computed properties; revocable |
 
@@ -261,9 +261,9 @@ All endpoints are documented via Swagger UI (available at `/swagger` in developm
 
 | Method | Path | Auth | Description |
 |---|---|---|---|
-| `POST` | `/api/payments` | Customer | Upload payment proof |
+| `POST` | `/api/payments` | Customer | Upload payment proof image |
 | `GET` | `/api/payments` | `payments:read` | Get all unverified payments |
-| `PUT` | `/api/payments/{id}/verify` | `payments:update` | Verify a payment |
+| `PUT` | `/api/payments/{id}/verify` | `payments:update` | Verify payment and set the confirmed amount |
 
 ### Carts — `api/carts`
 
@@ -375,8 +375,9 @@ Hangfire is used for all asynchronous operations, backed by SQL Server storage.
 | Daily pending orders report | Recurring (daily) | Cron — sends admin summary |
 | Daily unverified payments report | Recurring (daily) | Cron — sends admin summary |
 | Daily low-stock bundles report | Recurring (daily) | Cron — sends admin summary |
+| Remove expired refresh tokens | Recurring (daily) | Cron — cleans up expired/revoked tokens from DB |
 
-**Dashboard**: `/hangfire` — protected with HTTP Basic Authentication (credentials from `appsettings.json`).
+**Dashboard**: `/jobs` — protected with HTTP Basic Authentication (credentials from `appsettings.json`).
 
 ---
 
@@ -464,7 +465,7 @@ Both policies and their parameters are configurable via `RateLimitingOptions` in
 
 **Serilog** is configured for structured logging:
 - JSON formatter (machine-readable log files)
-- Rolling daily log files
+- Rolling daily log files written to `logs/log-.txt` (relative to the executable)
 - `SerilogRequestLogging` middleware logs every HTTP request with method, path, status code, and elapsed time
 - Unhandled exceptions are caught by `GlobalExceptionHandler`, logged, and returned as RFC 7807 `ProblemDetails` with status 500
 
@@ -680,9 +681,9 @@ The API will be available at `https://localhost:<port>`.
 | URL | Description |
 |---|---|
 | `https://localhost:<port>/swagger` | Swagger UI |
-| `https://localhost:<port>/api-docs` | ReDoc |
+| `https://localhost:<port>/redoc` | ReDoc |
 | `https://localhost:<port>/health` | Health check status |
-| `https://localhost:<port>/hangfire` | Hangfire dashboard |
+| `https://localhost:<port>/jobs` | Hangfire dashboard |
 
 ---
 

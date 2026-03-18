@@ -5,7 +5,7 @@ public class TemplateRenderer : ITemplateRenderer
     public async Task<string> RenderAsync(string templateName, Dictionary<string, string> placeholders)
     {
         var templatePath = Path.Combine(AppContext.BaseDirectory, "Templates", $"{templateName}.html");
-        
+
         if (!File.Exists(templatePath))
             throw new FileNotFoundException($"Template {templateName} not found at {templatePath}");
 
